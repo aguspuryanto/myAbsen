@@ -46,7 +46,9 @@
   "description": "An Ionic project",
   "cordova": {
     "plugins": {
-      "cordova-plugin-geolocation": {},
+      "cordova-plugin-geolocation": {
+        "GEOLOCATION_USAGE_DESCRIPTION": "To locate you"
+      },
       "cordova-plugin-android-permissions": {},
       "cordova-plugin-request-location-accuracy": {},
       "cordova-plugin-nativegeocoder": {}

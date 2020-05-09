@@ -6,18 +6,24 @@ page-home {
             margin-bottom: 0px;
         }
     }
-    
+
     .list-md .item-block .item-inner, .item-md.item-block .item-inner {
-        border-bottom: none;
+        // border-bottom: none;
     }
 
-    .list-md .item-md.item-block .item-inner { padding-right: 0px; }
+    .list-md .item-md.item-block .item-inner { 
+        // padding-right: 0px;
+    }
 
     .list-md .item-md {
         // padding-left: 10px;
 
         .label-md {
-            margin: 0px;
+            // margin: 0px;
         }
+    }
+
+    ion-icon {
+        font-size: 34px; //Preferred size here
     }
 }

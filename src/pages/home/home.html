@@ -26,7 +26,7 @@
     </ion-row>
 
     <ion-row>
-      <ion-col size="3">
+      <ion-col text-center size="4" (click)="absenPagi()">
         <ion-card>
           <ion-card-content>
             <h1>Pagi</h1>
@@ -34,7 +34,7 @@
           </ion-card-content>
         </ion-card>
       </ion-col>
-      <ion-col size="3">
+      <ion-col text-center size="4" (click)="absenSiang()">
         <ion-card>
           <ion-card-content>
             <h1>Siang</h1>
@@ -42,7 +42,7 @@
           </ion-card-content>
         </ion-card>
       </ion-col>
-      <ion-col size="3">
+      <ion-col text-center size="4" (click)="absenPulang()">
         <ion-card>
           <ion-card-content>
             <h1>Pulang</h1>
@@ -59,31 +59,33 @@
       <ion-label>Recent</ion-label>
       <button ion-button>Clear</button>
     </ion-list-header>
-    <ion-row>
-      <ion-item col-4>
-        <ion-card>
-          <ion-card-content>
-            <h1>Ijin</h1>
-            <p>Text Here</p>
-          </ion-card-content>
-        </ion-card>
-      </ion-item>
-      <ion-item col-4>
-        <ion-card>
-          <ion-card-content>
-            <h1>Ijin</h1>
-            <p>Text Here</p>
-          </ion-card-content>
-        </ion-card>
-      </ion-item>
-      <ion-item col-4>
-        <ion-card>
-          <ion-card-content>
-            <h1>Ijin</h1>
-            <p>Text Here</p>
-          </ion-card-content>
-        </ion-card>
-      </ion-item>
-    </ion-row>
+    <ion-item>
+      <ion-row no-padding justify-content-start align-items-start>
+        <ion-col text-center size="4" (click)="absenPagi()">
+          <ion-card>
+            <ion-card-content>
+              <ion-icon name="calendar"></ion-icon>
+              <h1>Pagi</h1>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col text-center size="4" (click)="absenSiang()">
+          <ion-card>
+            <ion-card-content>
+              <ion-icon name="calendar"></ion-icon>              
+              <h1>Siang</h1>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col text-center size="4" (click)="absenPulang()">
+          <ion-card>
+            <ion-card-content>
+              <ion-icon name="calendar"></ion-icon>  
+              <h1>Pulang</h1>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-item>
   </ion-list>
 </ion-content>

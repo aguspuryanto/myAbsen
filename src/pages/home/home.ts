@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, AlertController } from 'ionic-angular';
 
 import { Geolocation } from '@ionic-native/geolocation';
 import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderForwardResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder';
@@ -24,7 +24,10 @@ export class HomePage {
   geocoder;
   api_key: string = '62be5e223e43bbd5664ddd6523d5d5b5d64c226';
 
-  constructor(public navCtrl: NavController, private geolocation: Geolocation, private nativeGeocoder: NativeGeocoder, public httpClient: HttpClient) {
+  now = new Date();
+  time = this.now.getHours() * 60 + this.now.getMinutes();
+
+  constructor(public navCtrl: NavController, private alertCtrl: AlertController, private geolocation: Geolocation, private nativeGeocoder: NativeGeocoder, public httpClient: HttpClient) {
     // this.geocoder = new Geocodio('62be5e223e43bbd5664ddd6523d5d5b5d64c226');
   }
   
@@ -134,6 +137,75 @@ export class HomePage {
     //   .catch((error: any) => {
     //     this.address = "Address Not Available!";
     //   }); 
+  }
+
+  absenPagi(){
+    // 08:30-08:40
+    var start = 8 * 60 + 30;
+    var end   = 8 * 60 + 40;
+
+    console.log(this.now.getHours() + ":" + this.now.getMinutes());
+
+    var title = 'Absen Pagi';
+    if(this.time >= start && this.time < end){
+      this.presentAlert(title, title + ' berhasil disimpan');
+    } else {
+      if(this.time < start){
+        this.presentAlert(title, 'Belum Waktu ' + title);
+      }
+      if(this.time > end){
+        this.presentAlert(title, title + ' Terlambat');
+      }
+    }
+  }
+
+  absenSiang(){
+    // 12:00-13:00
+    var start = 12 * 60;
+    var end   = 13 * 60;
+
+    console.log(this.now.getHours() + ":" + this.now.getMinutes());
+    
+    var title = 'Absen Siang';
+    if(this.time >= start && this.time < end){
+      this.presentAlert(title, title + ' berhasil disimpan');
+    } else {
+      if(this.time < start){
+        this.presentAlert(title, 'Belum Waktu ' + title);
+      }
+      if(this.time > end){
+        this.presentAlert(title, title + ' Terlambat');
+      }
+    }
+  }
+
+  absenPulang(){
+    // 16:30-18:00
+    var start = 16 * 60 + 30;
+    var end   = 18 * 60;
+
+    console.log(this.now.getHours() + ":" + this.now.getMinutes());
+    
+    var title = 'Absen Pulang';
+    if(this.time >= start && this.time < end){
+      this.presentAlert(title, title + ' berhasil disimpan');
+    } else {
+      if(this.time < start){
+        this.presentAlert(title, 'Belum Waktu ' + title);
+      }
+      if(this.time > end){
+        this.presentAlert(title, title + ' Terlambat');
+      }
+    }
+  }
+
+  presentAlert(title: string, subtitle: string) {
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: subtitle,
+      buttons: ['Dismiss']
+    });
+    alert.present();
   }
   
 }

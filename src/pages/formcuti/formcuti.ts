@@ -36,6 +36,8 @@ export class FormcutiPage {
       if(data['Success']==true){
         this.presentAlert('Success', data['Msg']);
       }
+    }, (error)=>{
+      console.log("Error with " + JSON.stringify(error));
     });
   }
 

@@ -11,7 +11,8 @@ import { LoadingController } from 'ionic-angular';
 @Injectable()
 export class ApiProvider {
   loading : any;
-  apiUrl: string = "http://localhost/myabsenweb/api/";
+  // apiUrl: string = "http://localhost/myabsenweb/api/";
+  apiUrl: string = "http://mysod.xyz/myabsenweb/api/";
 
   constructor(public loadingCtrl: LoadingController, public http: HttpClient) {
     console.log('Hello ApiProvider Provider');
@@ -58,6 +59,10 @@ export class ApiProvider {
 
   postFormIjin(params){
     return this.post('frmijin', params);
+  }
+
+  postAbsensi(params){
+    return this.post('frmabsensi', params);
   }
 
   async loadingshow(){

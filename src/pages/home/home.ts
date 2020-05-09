@@ -10,6 +10,7 @@ import { HttpClient } from '@angular/common/http';
 import { FormijinPage } from '../formijin/formijin';
 import { FormsakitPage } from '../formsakit/formsakit';
 import { FormcutiPage } from '../formcuti/formcuti';
+import { ApiProvider } from '../../providers/api/api';
 
 declare var google;
 
@@ -31,7 +32,9 @@ export class HomePage {
   now = new Date();
   time = this.now.getHours() * 60 + this.now.getMinutes();
 
-  constructor(public platform: Platform, public navCtrl: NavController, private alertCtrl: AlertController, private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, private nativeGeocoder: NativeGeocoder, private zone: NgZone, public httpClient: HttpClient) {
+  formabsensi: any = {};
+
+  constructor(public platform: Platform, public navCtrl: NavController, private alertCtrl: AlertController, private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, private nativeGeocoder: NativeGeocoder, private zone: NgZone, public httpClient: HttpClient, public api: ApiProvider) {
     // this.geocoder = new Geocodio('62be5e223e43bbd5664ddd6523d5d5b5d64c226');
   }
 
@@ -173,17 +176,50 @@ export class HomePage {
     var start = 8 * 60 + 30;
     var end   = 8 * 60 + 40;
 
-    console.log(this.now.getHours() + ":" + this.now.getMinutes());
+    console.log(this.now.getHours() + ":" + ("0" + this.now.getMinutes()).substr(-2));
 
     var title = 'Absen Pagi';
     if(this.time >= start && this.time < end){
-      this.presentAlert(title, title + ' berhasil disimpan');
+
+      this.formabsensi.tgl = this.now.toISOString().split('T')[0];
+      this.formabsensi.time = this.now.getHours() + ":" + ("0" + this.now.getMinutes()).substr(-2);
+      this.formabsensi.type = title;
+      this.formabsensi.latlong = this.latitude + ',' + this.longitude;
+      this.formabsensi.chekpoint = this.address;
+      this.formabsensi.iduser = 1;
+
+      this.api.postAbsensi(this.formabsensi).then((data: any[])=> {
+        console.log(data['Success'] + "; " + data['Msg']);
+        if(data['Success']==true){
+          this.presentAlert(title, data['Msg']);
+        }
+      }, (error)=>{
+        console.log("Error with " + JSON.stringify(error));
+      });
+
+      // this.presentAlert(title, title + ' berhasil disimpan');
     } else {
       if(this.time < start){
         this.presentAlert(title, 'Belum Waktu ' + title);
       }
       if(this.time > end){
-        this.presentAlert(title, title + ' Terlambat');
+
+        this.formabsensi.tgl = this.now.toISOString().split('T')[0];
+        this.formabsensi.time = this.now.getHours() + ":" + ("0" + this.now.getMinutes()).substr(-2);
+        this.formabsensi.type = title;
+        this.formabsensi.latlong = this.latitude + ',' + this.longitude;
+        this.formabsensi.chekpoint = this.address;
+        this.formabsensi.iduser = 1;
+  
+        this.api.postAbsensi(this.formabsensi).then((data: any[])=> {
+          console.log(data['Success'] + "; " + data['Msg']);
+          if(data['Success']==true){
+          //   this.presentAlert(title, data['Msg']);        
+            this.presentAlert(title, title + ' Terlambat');
+          }
+        }, (error)=>{
+          console.log("Error with " + JSON.stringify(error));
+        });
       }
     }
   }
@@ -193,17 +229,50 @@ export class HomePage {
     var start = 12 * 60;
     var end   = 13 * 60;
 
-    console.log(this.now.getHours() + ":" + this.now.getMinutes());
+    console.log(this.now.getHours() + ":" + ("0" + this.now.getMinutes()).substr(-2));
     
     var title = 'Absen Siang';
     if(this.time >= start && this.time < end){
-      this.presentAlert(title, title + ' berhasil disimpan');
+
+      this.formabsensi.tgl = this.now.toISOString().split('T')[0];
+      this.formabsensi.time = this.now.getHours() + ":" + ("0" + this.now.getMinutes()).substr(-2);
+      this.formabsensi.type = title;
+      this.formabsensi.latlong = this.latitude + ',' + this.longitude;
+      this.formabsensi.chekpoint = this.address;
+      this.formabsensi.iduser = 1;
+
+      this.api.postAbsensi(this.formabsensi).then((data: any[])=> {
+        console.log(data['Success'] + "; " + data['Msg']);
+        if(data['Success']==true){
+          this.presentAlert(title, data['Msg']);
+        }
+      }, (error)=>{
+        console.log("Error with " + JSON.stringify(error));
+      });
+
+      // this.presentAlert(title, title + ' berhasil disimpan');
     } else {
       if(this.time < start){
         this.presentAlert(title, 'Belum Waktu ' + title);
       }
       if(this.time > end){
-        this.presentAlert(title, title + ' Terlambat');
+
+        this.formabsensi.tgl = this.now.toISOString().split('T')[0];
+        this.formabsensi.time = this.now.getHours() + ":" + ("0" + this.now.getMinutes()).substr(-2);
+        this.formabsensi.type = title;
+        this.formabsensi.latlong = this.latitude + ',' + this.longitude;
+        this.formabsensi.chekpoint = this.address;
+        this.formabsensi.iduser = 1;
+  
+        this.api.postAbsensi(this.formabsensi).then((data: any[])=> {
+          console.log(data['Success'] + "; " + data['Msg']);
+          if(data['Success']==true){
+          //   this.presentAlert(title, data['Msg']);        
+            this.presentAlert(title, title + ' Terlambat');
+          }
+        }, (error)=>{
+          console.log("Error with " + JSON.stringify(error));
+        });
       }
     }
   }
@@ -213,17 +282,50 @@ export class HomePage {
     var start = 16 * 60 + 30;
     var end   = 18 * 60;
 
-    console.log(this.now.getHours() + ":" + this.now.getMinutes());
+    console.log(this.now.getHours() + ":" + ("0" + this.now.getMinutes()).substr(-2));
     
     var title = 'Absen Pulang';
     if(this.time >= start && this.time < end){
-      this.presentAlert(title, title + ' berhasil disimpan');
+
+      this.formabsensi.tgl = this.now.toISOString().split('T')[0];
+      this.formabsensi.time = this.now.getHours() + ":" + ("0" + this.now.getMinutes()).substr(-2);
+      this.formabsensi.type = title;
+      this.formabsensi.latlong = this.latitude + ',' + this.longitude;
+      this.formabsensi.chekpoint = this.address;
+      this.formabsensi.iduser = 1;
+
+      this.api.postAbsensi(this.formabsensi).then((data: any[])=> {
+        console.log(data['Success'] + "; " + data['Msg']);
+        if(data['Success']==true){
+          this.presentAlert(title, data['Msg']);
+        }
+      }, (error)=>{
+        console.log("Error with " + JSON.stringify(error));
+      });
+
+      // this.presentAlert(title, title + ' berhasil disimpan');
     } else {
       if(this.time < start){
         this.presentAlert(title, 'Belum Waktu ' + title);
       }
       if(this.time > end){
-        this.presentAlert(title, title + ' Terlambat');
+
+        this.formabsensi.tgl = this.now.toISOString().split('T')[0];
+        this.formabsensi.time = this.now.getHours() + ":" + ("0" + this.now.getMinutes()).substr(-2);
+        this.formabsensi.type = title;
+        this.formabsensi.latlong = this.latitude + ',' + this.longitude;
+        this.formabsensi.chekpoint = this.address;
+        this.formabsensi.iduser = 1;
+  
+        this.api.postAbsensi(this.formabsensi).then((data: any[])=> {
+          console.log(data['Success'] + "; " + data['Msg']);
+          if(data['Success']==true){
+          //   this.presentAlert(title, data['Msg']);        
+            this.presentAlert(title, title + ' Terlambat');
+          }
+        }, (error)=>{
+          console.log("Error with " + JSON.stringify(error));
+        });
       }
     }
   }

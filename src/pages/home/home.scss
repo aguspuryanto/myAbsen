@@ -4,6 +4,8 @@ page-home {
     .list-md {
         .list-header-md {
             margin-bottom: 0px;
+            border-bottom: 1px solid #dedede;
+            color: #000;
         }
     }
 
@@ -15,12 +17,20 @@ page-home {
         // padding-right: 0px;
     }
 
-    .list-md .item-md {
-        // padding-left: 10px;
+    .item-md.item-block .item-inner {
+        // padding-right: 0px;
+    }
 
-        .label-md {
-            // margin: 0px;
+    ion-item .list-md .item-md {
+        // padding: 0px;
+
+        ion-label .label .label-md {
+            // margin: 0px !important;
         }
+    }
+
+    ion-item .label-md {
+        // margin: 0px !important;
     }
 
     ion-card {

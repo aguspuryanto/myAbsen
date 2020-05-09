@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { ApiProvider } from '../../providers/api/api';
+import { NgForm } from '@angular/forms';
 
 /**
  * Generated class for the FormsakitPage page.
@@ -15,6 +16,8 @@ import { ApiProvider } from '../../providers/api/api';
   templateUrl: 'formsakit.html',
 })
 export class FormsakitPage {
+  @ViewChild('slForm') slForm: NgForm;
+  
   formijin: any = {};
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private alertCtrl: AlertController, public api: ApiProvider) {
@@ -36,6 +39,7 @@ export class FormsakitPage {
       if(data['Success']==true){
         this.presentAlert('Success', data['Msg']);
       }
+      this.slForm.reset();
     }, (error)=>{
       console.log("Error with " + JSON.stringify(error));
     });

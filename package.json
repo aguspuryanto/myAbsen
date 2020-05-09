@@ -31,6 +31,7 @@
     "cordova-android": "8.1.0",
     "cordova-plugin-add-swift-support": "^2.0.2",
     "cordova-plugin-android-permissions": "^1.0.2",
+    "cordova-plugin-cleartext": "^1.0.0",
     "cordova-plugin-geolocation": "^4.0.2",
     "cordova-plugin-nativegeocoder": "^3.4.1",
     "cordova-plugin-request-location-accuracy": "^2.3.0",

@@ -11,7 +11,7 @@
 </ion-header>
 
 <ion-content padding>
-  <form>
+  <form #slForm="ngForm" (ngSubmit)="submitFormIjin()" novalidate>
     <h4 margin-top>Isikan Data Anda</h4>
     <ion-list>
       <ion-item>
@@ -28,7 +28,7 @@
       </ion-item>
       <ion-row>
         <ion-col text-center>
-          <button ion-button block color="secondary" (click)="submitFormIjin()">Submit</button>
+          <button ion-button block color="secondary" type="submit">Submit</button>
         </ion-col>
       </ion-row>
     </ion-list>

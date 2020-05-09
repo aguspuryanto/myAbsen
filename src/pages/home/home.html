@@ -55,37 +55,41 @@
 
   <!-- List Headers in Lists -->
   <ion-list>
-    <ion-list-header>
+    <ion-list-header lines="full" color="tertiary">
       <ion-label>Recent</ion-label>
-      <button ion-button>Clear</button>
+      <button ion-button fill="clear">
+        <ion-icon name="options" slot="end"></ion-icon>
+      </button>
     </ion-list-header>
     <ion-item>
-      <ion-row no-padding justify-content-start align-items-start>
-        <ion-col text-center size="4" (click)="formIjin()">
-          <ion-card>
-            <ion-card-content>
-              <ion-icon name="calendar"></ion-icon>
-              <h1>Ijin</h1>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-        <ion-col text-center size="4" (click)="formSakit()">
-          <ion-card>
-            <ion-card-content>
-              <ion-icon name="medkit"></ion-icon>              
-              <h1>Sakit</h1>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-        <ion-col text-center size="4" (click)="formCuti()">
-          <ion-card>
-            <ion-card-content>
-              <ion-icon name="clipboard"></ion-icon>  
-              <h1>Cuti</h1>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-      </ion-row>
+      <ion-grid>
+        <ion-row no-padding justify-content-start align-items-start>
+          <ion-col text-center size="4" (click)="formIjin()">
+            <ion-card>
+              <ion-card-content>
+                <ion-icon name="calendar"></ion-icon>
+                <h1>Ijin</h1>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+          <ion-col text-center size="4" (click)="formSakit()">
+            <ion-card>
+              <ion-card-content>
+                <ion-icon name="medkit"></ion-icon>              
+                <h1>Sakit</h1>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+          <ion-col text-center size="4" (click)="formCuti()">
+            <ion-card>
+              <ion-card-content>
+                <ion-icon name="clipboard"></ion-icon>  
+                <h1>Cuti</h1>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-item>
   </ion-list>
 </ion-content>

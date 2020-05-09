@@ -60,49 +60,58 @@ export class HomePage {
   }
 
   loadMap() {
+    return new Promise((resolve, reject) => {
+      let options = {
+        enableHighAccuracy: true,
+        maximumAge : 60000,
+        timeout : 10000
+      };
 
-    var options = {
-      enableHighAccuracy: true,
-      maximumAge : 60000,
-      timeout : 10000
-    };
+      this.geolocation.getCurrentPosition(options).then((resp) => {
 
-    this.geolocation.getCurrentPosition(options).then((resp) => {
+        this.latitude = resp.coords.latitude;
+        this.longitude = resp.coords.longitude;
 
-      this.latitude = resp.coords.latitude;
-      this.longitude = resp.coords.longitude;
-
-      this.getAddressFromCoords(this.latitude, this.longitude);
-
-      // let latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
-      // let mapOptions = {
-      //   center: latLng,
-      //   zoom: 15,
-      //   mapTypeId: google.maps.MapTypeId.ROADMAP
-      // }
-
-      // this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-      //  this.map.addListener('dragend', () => { 
-      //   this.latitude = this.map.center.lat();
-      //   this.longitude = this.map.center.lng();
-      //    // this.getAddressFromCoords(this.map.center.lat(), this.map.center.lng())
-      // });
-
-    }).catch((error) => {
-      console.log('Error getting location', error);
-    });
-
-    let woptions = {
-      frequency: 3000,
-      enableHighAccuracy: true
-    };
-
-    let watch = this.geolocation.watchPosition(woptions);
-    watch.subscribe((data) => {
-      this.zone.run(() => {
-        this.latitude = data.coords.latitude;
-        this.longitude = data.coords.longitude;
         this.getAddressFromCoords(this.latitude, this.longitude);
+
+        // let latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
+        // let mapOptions = {
+        //   center: latLng,
+        //   zoom: 15,
+        //   mapTypeId: google.maps.MapTypeId.ROADMAP
+        // }
+
+        // this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+        //  this.map.addListener('dragend', () => { 
+        //   this.latitude = this.map.center.lat();
+        //   this.longitude = this.map.center.lng();
+        //    // this.getAddressFromCoords(this.map.center.lat(), this.map.center.lng())
+        // });
+
+      }).catch((error) => {
+        console.log('Error getting location', error);
+        this.address = error.message;
+      });
+
+      let watchOptions = {
+        frequency: 3000,
+        timeout : 3000,
+        enableHighAccuracy: true
+      };
+
+      let watch = this.geolocation.watchPosition(watchOptions);
+      watch.subscribe((data) => {
+        console.log("watchPosition", data);
+        // this.address = data.message;
+        if(!data){
+          this.zone.run(() => {
+            this.latitude = data.coords.latitude;
+            this.longitude = data.coords.longitude;
+            this.getAddressFromCoords(this.latitude, this.longitude);
+          });
+        }
+      }, function(error) {
+        console.log('Error w/ watchPosition: ' +JSON.stringify(error));
       });
     });
   }
@@ -184,15 +193,15 @@ export class HomePage {
       this.formabsensi.tgl = this.now.toISOString().split('T')[0];
       this.formabsensi.time = this.now.getHours() + ":" + ("0" + this.now.getMinutes()).substr(-2);
       this.formabsensi.type = title;
-      this.formabsensi.latlong = this.latitude + ',' + this.longitude;
+      this.formabsensi.latlong = (this.latitude!==undefined) ? this.latitude + ',' + this.longitude : '';
       this.formabsensi.chekpoint = this.address;
       this.formabsensi.iduser = 1;
 
       this.api.postAbsensi(this.formabsensi).then((data: any[])=> {
         console.log(data['Success'] + "; " + data['Msg']);
-        if(data['Success']==true){
+        // if(data['Success']==true){
           this.presentAlert(title, data['Msg']);
-        }
+        // }
       }, (error)=>{
         console.log("Error with " + JSON.stringify(error));
       });
@@ -207,16 +216,15 @@ export class HomePage {
         this.formabsensi.tgl = this.now.toISOString().split('T')[0];
         this.formabsensi.time = this.now.getHours() + ":" + ("0" + this.now.getMinutes()).substr(-2);
         this.formabsensi.type = title;
-        this.formabsensi.latlong = this.latitude + ',' + this.longitude;
+        this.formabsensi.latlong = (this.latitude!==undefined) ? this.latitude + ',' + this.longitude : '';
         this.formabsensi.chekpoint = this.address;
         this.formabsensi.iduser = 1;
   
         this.api.postAbsensi(this.formabsensi).then((data: any[])=> {
           console.log(data['Success'] + "; " + data['Msg']);
-          if(data['Success']==true){
-          //   this.presentAlert(title, data['Msg']);        
-            this.presentAlert(title, title + ' Terlambat');
-          }
+          // if(data['Success']==true){
+            this.presentAlert(title, data['Msg']);
+          // }
         }, (error)=>{
           console.log("Error with " + JSON.stringify(error));
         });
@@ -237,15 +245,15 @@ export class HomePage {
       this.formabsensi.tgl = this.now.toISOString().split('T')[0];
       this.formabsensi.time = this.now.getHours() + ":" + ("0" + this.now.getMinutes()).substr(-2);
       this.formabsensi.type = title;
-      this.formabsensi.latlong = this.latitude + ',' + this.longitude;
+      this.formabsensi.latlong = (this.latitude!==undefined) ? this.latitude + ',' + this.longitude : '';
       this.formabsensi.chekpoint = this.address;
       this.formabsensi.iduser = 1;
 
       this.api.postAbsensi(this.formabsensi).then((data: any[])=> {
         console.log(data['Success'] + "; " + data['Msg']);
-        if(data['Success']==true){
+        // if(data['Success']==true){
           this.presentAlert(title, data['Msg']);
-        }
+        // }
       }, (error)=>{
         console.log("Error with " + JSON.stringify(error));
       });
@@ -260,16 +268,15 @@ export class HomePage {
         this.formabsensi.tgl = this.now.toISOString().split('T')[0];
         this.formabsensi.time = this.now.getHours() + ":" + ("0" + this.now.getMinutes()).substr(-2);
         this.formabsensi.type = title;
-        this.formabsensi.latlong = this.latitude + ',' + this.longitude;
+        this.formabsensi.latlong = (this.latitude!==undefined) ? this.latitude + ',' + this.longitude : '';
         this.formabsensi.chekpoint = this.address;
         this.formabsensi.iduser = 1;
   
         this.api.postAbsensi(this.formabsensi).then((data: any[])=> {
           console.log(data['Success'] + "; " + data['Msg']);
-          if(data['Success']==true){
-          //   this.presentAlert(title, data['Msg']);        
-            this.presentAlert(title, title + ' Terlambat');
-          }
+          // if(data['Success']==true){
+            this.presentAlert(title, data['Msg']);
+          // }
         }, (error)=>{
           console.log("Error with " + JSON.stringify(error));
         });
@@ -290,15 +297,15 @@ export class HomePage {
       this.formabsensi.tgl = this.now.toISOString().split('T')[0];
       this.formabsensi.time = this.now.getHours() + ":" + ("0" + this.now.getMinutes()).substr(-2);
       this.formabsensi.type = title;
-      this.formabsensi.latlong = this.latitude + ',' + this.longitude;
+      this.formabsensi.latlong = (this.latitude!==undefined) ? this.latitude + ',' + this.longitude : '';
       this.formabsensi.chekpoint = this.address;
       this.formabsensi.iduser = 1;
 
       this.api.postAbsensi(this.formabsensi).then((data: any[])=> {
         console.log(data['Success'] + "; " + data['Msg']);
-        if(data['Success']==true){
+        // if(data['Success']==true){
           this.presentAlert(title, data['Msg']);
-        }
+        // }
       }, (error)=>{
         console.log("Error with " + JSON.stringify(error));
       });
@@ -313,16 +320,15 @@ export class HomePage {
         this.formabsensi.tgl = this.now.toISOString().split('T')[0];
         this.formabsensi.time = this.now.getHours() + ":" + ("0" + this.now.getMinutes()).substr(-2);
         this.formabsensi.type = title;
-        this.formabsensi.latlong = this.latitude + ',' + this.longitude;
+        this.formabsensi.latlong = (this.latitude!==undefined) ? this.latitude + ',' + this.longitude : '';
         this.formabsensi.chekpoint = this.address;
         this.formabsensi.iduser = 1;
   
         this.api.postAbsensi(this.formabsensi).then((data: any[])=> {
           console.log(data['Success'] + "; " + data['Msg']);
-          if(data['Success']==true){
-          //   this.presentAlert(title, data['Msg']);        
-            this.presentAlert(title, title + ' Terlambat');
-          }
+          // if(data['Success']==true){
+            this.presentAlert(title, title + ' Overtime');
+          // }
         }, (error)=>{
           console.log("Error with " + JSON.stringify(error));
         });

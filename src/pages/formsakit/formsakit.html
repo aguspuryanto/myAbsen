@@ -1,0 +1,36 @@
+<!--
+  Generated template for the FormsakitPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>formsakit</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <form>
+    <h4 margin-top>Isikan Data Anda</h4>
+    <ion-list>
+      <ion-item>
+        <ion-label>Nama</ion-label>
+        <ion-input type="text" [(ngModel)]="namaKaryawan" name="namaKaryawan" placeholder="Nama Karyawan"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Tgl Ijin</ion-label>
+        <ion-datetime displayFormat="MMM DD YYYY" [(ngModel)]="tglIjin" [ngModelOptions]="{standalone: true}"></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Keterangan Ijin</ion-label>
+        <ion-textarea rows="6" cols="20" [(ngModel)]="ketIjin" [ngModelOptions]="{standalone: true}"></ion-textarea>
+      </ion-item>
+      <ion-row>
+        <ion-col text-center>
+          <button ion-button block color="secondary" (click)="onSignIn()">Submit</button>
+        </ion-col>
+      </ion-row>
+    </ion-list>
+  </form>
+</ion-content>

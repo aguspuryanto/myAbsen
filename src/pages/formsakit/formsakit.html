@@ -16,19 +16,19 @@
     <ion-list>
       <ion-item>
         <ion-label>Nama</ion-label>
-        <ion-input type="text" [(ngModel)]="namaKaryawan" name="namaKaryawan" placeholder="Nama Karyawan"></ion-input>
+        <ion-input type="text" [(ngModel)]="formijin.namaKaryawan" name="namaKaryawan" placeholder="Nama Karyawan"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Tgl Ijin</ion-label>
-        <ion-datetime displayFormat="MMM DD YYYY" [(ngModel)]="tglIjin" [ngModelOptions]="{standalone: true}"></ion-datetime>
+        <ion-datetime displayFormat="MMM DD YYYY" [(ngModel)]="formijin.tglIjin" [ngModelOptions]="{standalone: true}"></ion-datetime>
       </ion-item>
       <ion-item>
         <ion-label stacked>Keterangan Ijin</ion-label>
-        <ion-textarea rows="6" cols="20" [(ngModel)]="ketIjin" [ngModelOptions]="{standalone: true}"></ion-textarea>
+        <ion-textarea rows="6" cols="20" [(ngModel)]="formijin.ketIjin" [ngModelOptions]="{standalone: true}"></ion-textarea>
       </ion-item>
       <ion-row>
         <ion-col text-center>
-          <button ion-button block color="secondary" (click)="onSignIn()">Submit</button>
+          <button ion-button block color="secondary" (click)="submitFormIjin()">Submit</button>
         </ion-col>
       </ion-row>
     </ion-list>

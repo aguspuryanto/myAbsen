@@ -14,6 +14,7 @@ import { HomePage } from '../pages/home/home';
 import { FormijinPage } from '../pages/formijin/formijin';
 import { FormsakitPage } from '../pages/formsakit/formsakit';
 import { FormcutiPage } from '../pages/formcuti/formcuti';
+import { ApiProvider } from '../providers/api/api';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { FormcutiPage } from '../pages/formcuti/formcuti';
     Geolocation,
     NativeGeocoder,
     LocationAccuracy,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    ApiProvider
   ]
 })
 export class AppModule {}

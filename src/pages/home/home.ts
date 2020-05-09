@@ -1,11 +1,15 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NavController, AlertController } from 'ionic-angular';
+import { Component, ViewChild, ElementRef, NgZone } from '@angular/core';
+import { Platform, NavController, AlertController } from 'ionic-angular';
 
 import { Geolocation } from '@ionic-native/geolocation';
-import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderForwardResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder';
+import { LocationAccuracy } from '@ionic-native/location-accuracy';
+import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder';
 // import { Geocodio } from 'geocodio-library-node';
 
 import { HttpClient } from '@angular/common/http';
+import { FormijinPage } from '../formijin/formijin';
+import { FormsakitPage } from '../formsakit/formsakit';
+import { FormcutiPage } from '../formcuti/formcuti';
 
 declare var google;
 
@@ -21,17 +25,34 @@ export class HomePage {
   latitude: number;
   longitude: number;
 
-  geocoder;
-  api_key: string = '62be5e223e43bbd5664ddd6523d5d5b5d64c226';
+  // geocoder;
+  // api_key: string = '62be5e223e43bbd5664ddd6523d5d5b5d64c226';
 
   now = new Date();
   time = this.now.getHours() * 60 + this.now.getMinutes();
 
-  constructor(public navCtrl: NavController, private alertCtrl: AlertController, private geolocation: Geolocation, private nativeGeocoder: NativeGeocoder, public httpClient: HttpClient) {
+  constructor(public platform: Platform, public navCtrl: NavController, private alertCtrl: AlertController, private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, private nativeGeocoder: NativeGeocoder, private zone: NgZone, public httpClient: HttpClient) {
     // this.geocoder = new Geocodio('62be5e223e43bbd5664ddd6523d5d5b5d64c226');
+  }
+
+  requestAccuracy() {
+    if (this.platform.is('cordova')) {
+      this.locationAccuracy.canRequest().then((canRequest: boolean) => {
+
+        if(canRequest) {
+          // the accuracy option will be ignored by iOS
+          this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
+            () => console.log('Request successful'),
+            error => console.log('Error requesting location permissions', error)
+          );
+        }
+      
+      });
+    }
   }
   
   ngOnInit() {
+    this.requestAccuracy();
     this.loadMap();
   }
 
@@ -42,14 +63,6 @@ export class HomePage {
       maximumAge : 60000,
       timeout : 10000
     };
-
-    // var onSuccess = function(position) {
-    //   console.log(position);
-    // }
-    
-    // var onError = function(error){
-    //   console.log(error);
-    // }
 
     this.geolocation.getCurrentPosition(options).then((resp) => {
 
@@ -75,6 +88,20 @@ export class HomePage {
     }).catch((error) => {
       console.log('Error getting location', error);
     });
+
+    let woptions = {
+      frequency: 3000,
+      enableHighAccuracy: true
+    };
+
+    let watch = this.geolocation.watchPosition(woptions);
+    watch.subscribe((data) => {
+      this.zone.run(() => {
+        this.latitude = data.coords.latitude;
+        this.longitude = data.coords.longitude;
+        this.getAddressFromCoords(this.latitude, this.longitude);
+      });
+    });
   }
 
   getAddressFromCoords(lattitude, longitude) {
@@ -94,23 +121,25 @@ export class HomePage {
 
     // } else {
 
-      let options: NativeGeocoderOptions = {
-        useLocale: true,
-        maxResults: 5
-      };
-      
-      // Ionic 3
-      this.nativeGeocoder.reverseGeocode(lattitude, longitude, options)
-      .then((result: NativeGeocoderReverseResult[]) => {
-        console.log("getAddressFromCoords reverseGeocode");
-        // {"latitude":-7.3841432,"longitude":112.59291119999999,"countryCode":"ID","countryName":"Indonesia","postalCode":"61262","administrativeArea":"Jawa Timur","subAdministrativeArea":"Kabupaten Sidoarjo","locality":"Kecamatan Krian","subLocality":"Tempel","thoroughfare":"","subThoroughfare":"","areasOfInterest":["Bakalan"]}
-        localStorage.setItem('Geocode_' + lattitude+'_'+longitude, JSON.stringify(result[0]));
-        this.address = result[0].subLocality + ", "+result[0].locality + ", "+result[0].subAdministrativeArea + ", "+result[0].postalCode + ", "+result[0].administrativeArea;
+      if (this.platform.is('cordova')) {
+        let options: NativeGeocoderOptions = {
+          useLocale: true,
+          maxResults: 5
+        };
+        
+        // Ionic 3
+        this.nativeGeocoder.reverseGeocode(lattitude, longitude, options)
+        .then((result: NativeGeocoderReverseResult[]) => {
+          console.log("getAddressFromCoords reverseGeocode");
+          // {"latitude":-7.3841432,"longitude":112.59291119999999,"countryCode":"ID","countryName":"Indonesia","postalCode":"61262","administrativeArea":"Jawa Timur","subAdministrativeArea":"Kabupaten Sidoarjo","locality":"Kecamatan Krian","subLocality":"Tempel","thoroughfare":"","subThoroughfare":"","areasOfInterest":["Bakalan"]}
+          localStorage.setItem('Geocode_' + lattitude+'_'+longitude, JSON.stringify(result[0]));
+          this.address = result[0].subLocality + ", "+result[0].locality + ", "+result[0].subAdministrativeArea;
 
-      })
-      .catch((error: any) => {
-        console.log(error)
-      });
+        })
+        .catch((error: any) => {
+          console.log(error)
+        });
+      }
 
     // }
 
@@ -197,6 +226,18 @@ export class HomePage {
         this.presentAlert(title, title + ' Terlambat');
       }
     }
+  }
+
+  formIjin(){
+    this.navCtrl.push(FormijinPage);
+  }
+
+  formSakit(){
+    this.navCtrl.push(FormsakitPage);
+  }
+
+  formCuti(){
+    this.navCtrl.push(FormcutiPage);
   }
 
   presentAlert(title: string, subtitle: string) {

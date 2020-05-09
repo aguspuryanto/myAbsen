@@ -6,15 +6,22 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { Geolocation } from '@ionic-native/geolocation';
 import { NativeGeocoder } from '@ionic-native/native-geocoder';
+import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { HttpClientModule } from '@angular/common/http';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
+import { FormijinPage } from '../pages/formijin/formijin';
+import { FormsakitPage } from '../pages/formsakit/formsakit';
+import { FormcutiPage } from '../pages/formcuti/formcuti';
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    FormijinPage,
+    FormsakitPage,
+    FormcutiPage
   ],
   imports: [
     BrowserModule,
@@ -24,13 +31,17 @@ import { HomePage } from '../pages/home/home';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    FormijinPage,
+    FormsakitPage,
+    FormcutiPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     Geolocation,
     NativeGeocoder,
+    LocationAccuracy,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

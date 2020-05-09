@@ -1,3 +1,23 @@
 page-home {
+    .col { padding: 0px !important; }
+    .card-content-md { padding: 10px; }
+    .list-md {
+        .list-header-md {
+            margin-bottom: 0px;
+        }
+    }
+    
+    .list-md .item-block .item-inner, .item-md.item-block .item-inner {
+        border-bottom: none;
+    }
 
+    .list-md .item-md.item-block .item-inner { padding-right: 0px; }
+
+    .list-md .item-md {
+        // padding-left: 10px;
+
+        .label-md {
+            margin: 0px;
+        }
+    }
 }

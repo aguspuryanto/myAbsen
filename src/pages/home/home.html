@@ -6,37 +6,84 @@
 
 <ion-content fullscreen>
   <div class="map-wrapper">
-    <button ion-button (click)="loadMap()" shape="round" color="dark">
+    <!-- <button ion-button (click)="loadMap()" shape="round" color="dark">
       <ion-icon slot="start" name="locate"></ion-icon>
       Where I Am
-    </button>
+    </button> -->
     <div #map id="map"></div>
   </div>
  
   <ion-grid>
     <ion-row>
-      <ion-col size="3">
-        <b>Lattitude</b>
-      </ion-col>
       <ion-col>
-        {{latitude}}
+        <ion-card>
+          <ion-card-content>
+            <b>Check Point</b>
+            <p>{{address}}</p>
+          </ion-card-content>
+        </ion-card>
       </ion-col>
     </ion-row>
+
     <ion-row>
       <ion-col size="3">
-        <b>Longitude</b>
+        <ion-card>
+          <ion-card-content>
+            <h1>Pagi</h1>
+            <p>08:30-08:40</p>
+          </ion-card-content>
+        </ion-card>
       </ion-col>
-      <ion-col>
-        {{longitude}}
-      </ion-col>
-    </ion-row>
-    <ion-row>
       <ion-col size="3">
-        <b>Address</b>
+        <ion-card>
+          <ion-card-content>
+            <h1>Siang</h1>
+            <p>12:00-13:00</p>
+          </ion-card-content>
+        </ion-card>
       </ion-col>
-      <ion-col>
-        {{address}}
+      <ion-col size="3">
+        <ion-card>
+          <ion-card-content>
+            <h1>Pulang</h1>
+            <p>16:30-18:00</p>
+          </ion-card-content>
+        </ion-card>
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <!-- List Headers in Lists -->
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Recent</ion-label>
+      <button ion-button>Clear</button>
+    </ion-list-header>
+    <ion-row>
+      <ion-item col-4>
+        <ion-card>
+          <ion-card-content>
+            <h1>Ijin</h1>
+            <p>Text Here</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-item>
+      <ion-item col-4>
+        <ion-card>
+          <ion-card-content>
+            <h1>Ijin</h1>
+            <p>Text Here</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-item>
+      <ion-item col-4>
+        <ion-card>
+          <ion-card-content>
+            <h1>Ijin</h1>
+            <p>Text Here</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-item>
+    </ion-row>
+  </ion-list>
 </ion-content>

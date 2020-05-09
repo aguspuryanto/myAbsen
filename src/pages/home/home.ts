@@ -3,6 +3,9 @@ import { NavController } from 'ionic-angular';
 
 import { Geolocation } from '@ionic-native/geolocation';
 import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderForwardResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder';
+// import { Geocodio } from 'geocodio-library-node';
+
+import { HttpClient } from '@angular/common/http';
 
 declare var google;
 
@@ -17,9 +20,12 @@ export class HomePage {
  
   latitude: number;
   longitude: number;
-  
-  constructor(public navCtrl: NavController, private geolocation: Geolocation, private nativeGeocoder: NativeGeocoder) {
 
+  geocoder;
+  api_key: string = '62be5e223e43bbd5664ddd6523d5d5b5d64c226';
+
+  constructor(public navCtrl: NavController, private geolocation: Geolocation, private nativeGeocoder: NativeGeocoder, public httpClient: HttpClient) {
+    // this.geocoder = new Geocodio('62be5e223e43bbd5664ddd6523d5d5b5d64c226');
   }
   
   ngOnInit() {
@@ -47,21 +53,21 @@ export class HomePage {
       this.latitude = resp.coords.latitude;
       this.longitude = resp.coords.longitude;
 
-      let latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
-      let mapOptions = {
-        center: latLng,
-        zoom: 15,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      }
+      this.getAddressFromCoords(this.latitude, this.longitude);
 
-      this.getAddressFromCoords(resp.coords.latitude, resp.coords.longitude);
+      // let latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
+      // let mapOptions = {
+      //   center: latLng,
+      //   zoom: 15,
+      //   mapTypeId: google.maps.MapTypeId.ROADMAP
+      // }
 
-      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-       this.map.addListener('dragend', () => { 
-        this.latitude = this.map.center.lat();
-        this.longitude = this.map.center.lng();
-         // this.getAddressFromCoords(this.map.center.lat(), this.map.center.lng())
-      });
+      // this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+      //  this.map.addListener('dragend', () => { 
+      //   this.latitude = this.map.center.lat();
+      //   this.longitude = this.map.center.lng();
+      //    // this.getAddressFromCoords(this.map.center.lat(), this.map.center.lng())
+      // });
 
     }).catch((error) => {
       console.log('Error getting location', error);
@@ -69,20 +75,41 @@ export class HomePage {
   }
 
   getAddressFromCoords(lattitude, longitude) {
-    console.log("getAddressFromCoords " + lattitude + " " + longitude);
-    let options: NativeGeocoderOptions = {
-      useLocale: true,
-      maxResults: 5
-    };
-    
-    // Ionic 3
-    this.nativeGeocoder.reverseGeocode(lattitude, longitude, options)
-    .then((result: NativeGeocoderReverseResult[]) => {
-      console.log(JSON.stringify(result[0]))
-    })
-    .catch((error: any) => {
-      console.log(error)
-    });
+    // console.log("getAddressFromCoords " + lattitude + " " + longitude);
+
+    // this.geocoder = this.httpClient.get('https://api.geocod.io/v1.4/reverse?q='+lattitude+','+longitude+'&api_key='+this.api_key);
+    // this.geocoder.subscribe(data => {
+    //   console.log('my data: ', data);
+    // });
+
+    // if(localStorage.getItem(lattitude+'_'+longitude) === null) {
+    //   let result = JSON.parse(localStorage.getItem('Geocode_' + lattitude+'_'+longitude) || '{}');
+    //   console.log("getAddressFromCoords localStorage", JSON.stringify(result));
+
+    //   this.address = result.subLocality + ", "+result.locality + ", "+result.subAdministrativeArea + ", "+result.postalCode + ", "+result.administrativeArea;
+      this.address = "Tempel, Kecamatan Krian, Kabupaten Sidoarjo";
+
+    // } else {
+
+      let options: NativeGeocoderOptions = {
+        useLocale: true,
+        maxResults: 5
+      };
+      
+      // Ionic 3
+      this.nativeGeocoder.reverseGeocode(lattitude, longitude, options)
+      .then((result: NativeGeocoderReverseResult[]) => {
+        console.log("getAddressFromCoords reverseGeocode");
+        // {"latitude":-7.3841432,"longitude":112.59291119999999,"countryCode":"ID","countryName":"Indonesia","postalCode":"61262","administrativeArea":"Jawa Timur","subAdministrativeArea":"Kabupaten Sidoarjo","locality":"Kecamatan Krian","subLocality":"Tempel","thoroughfare":"","subThoroughfare":"","areasOfInterest":["Bakalan"]}
+        localStorage.setItem('Geocode_' + lattitude+'_'+longitude, JSON.stringify(result[0]));
+        this.address = result[0].subLocality + ", "+result[0].locality + ", "+result[0].subAdministrativeArea + ", "+result[0].postalCode + ", "+result[0].administrativeArea;
+
+      })
+      .catch((error: any) => {
+        console.log(error)
+      });
+
+    // }
 
     // this.nativeGeocoder.forwardGeocode('Berlin', options)
     // .then((coordinates: NativeGeocoderForwardResult[]) => console.log('The coordinates are latitude=' + coordinates[0].latitude + ' and longitude=' + coordinates[0].longitude))

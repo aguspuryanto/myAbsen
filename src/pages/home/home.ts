@@ -124,10 +124,11 @@ export class HomePage {
     //   console.log('my data: ', data);
     // });
 
-    // if(localStorage.getItem(lattitude+'_'+longitude) === null) {
-    //   let result = JSON.parse(localStorage.getItem('Geocode_' + lattitude+'_'+longitude) || '{}');
-    //   console.log("getAddressFromCoords localStorage", JSON.stringify(result));
-
+    if(localStorage.getItem(lattitude+'_'+longitude) === null) {
+      let result = JSON.parse(localStorage.getItem('Geocode_' + lattitude+'_'+longitude) || '{}');
+      console.log("getAddressFromCoords localStorage", JSON.stringify(result));
+    }
+    
     //   this.address = result.subLocality + ", "+result.locality + ", "+result.subAdministrativeArea + ", "+result.postalCode + ", "+result.administrativeArea;
       this.address = "Tempel, Kecamatan Krian, Kabupaten Sidoarjo";
 
@@ -143,13 +144,13 @@ export class HomePage {
         this.nativeGeocoder.reverseGeocode(lattitude, longitude, options)
         .then((result: NativeGeocoderReverseResult[]) => {
           console.log("getAddressFromCoords reverseGeocode");
-          // {"latitude":-7.3841432,"longitude":112.59291119999999,"countryCode":"ID","countryName":"Indonesia","postalCode":"61262","administrativeArea":"Jawa Timur","subAdministrativeArea":"Kabupaten Sidoarjo","locality":"Kecamatan Krian","subLocality":"Tempel","thoroughfare":"","subThoroughfare":"","areasOfInterest":["Bakalan"]}
           localStorage.setItem('Geocode_' + lattitude+'_'+longitude, JSON.stringify(result[0]));
-          this.address = result[0].subLocality + ", "+result[0].locality + ", "+result[0].subAdministrativeArea;
+          // this.address = result[0].subLocality + ", "+result[0].locality + ", "+result[0].subAdministrativeArea;
+          this.address = this.pretifyAddress(result[0]);
 
         })
         .catch((error: any) => {
-          console.log(error)
+          alert('Error getting location'+ JSON.stringify(error));
         });
       }
 
@@ -178,6 +179,21 @@ export class HomePage {
     //   .catch((error: any) => {
     //     this.address = "Address Not Available!";
     //   }); 
+  }
+
+  // address
+  pretifyAddress(address){
+    let obj = [];
+    let data = "";
+    for (let key in address) {
+      obj.push(address[key]);
+    }
+    obj.reverse();
+    for (let val in obj) {
+      if(obj[val].length)
+      data += obj[val]+', ';
+    }
+    return address.slice(0, -2);
   }
 
   absenPagi(){

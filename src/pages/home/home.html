@@ -17,6 +17,9 @@
     <ion-row>
       <ion-col>
         <ion-card>
+          <ion-item>
+            <ion-icon name="location"></ion-icon>
+          </ion-item>
           <ion-card-content>
             <b>Check Point</b>
             <p>{{address}}</p>
@@ -56,15 +59,79 @@
   <!-- List Headers in Lists -->
   <ion-list>
     <ion-list-header lines="full" color="tertiary">
-      <ion-label>Recent</ion-label>
+      <ion-label>Absensi Hari ini</ion-label>
       <button ion-button fill="clear">
         <ion-icon name="options" slot="end"></ion-icon>
       </button>
     </ion-list-header>
-    <!-- <ion-item> -->
-      <ion-grid>
+    <ion-grid>
+      <ion-row no-padding justify-content-start align-items-start>
+        <ion-col text-center size="6">
+          <ion-card>
+            <ion-card-content>
+              <p>Absen Masuk</p>
+              <h1>08:00</h1>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col text-center size="6">
+          <ion-card>
+            <ion-card-content>
+              <p>Absen Keluar</p>
+              <h1>16:30</h1>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header lines="full" color="tertiary">
+      <ion-label>Pengajuan Kerja</ion-label>
+      <button ion-button fill="clear">
+        <ion-icon name="options" slot="end"></ion-icon>
+      </button>
+    </ion-list-header>
+    <ion-card>
+      <ion-item (click)="formIjin()">
+        <!-- <ion-avatar slot="start">
+          <img src="../../assets/user.jpg">
+        </ion-avatar> -->
+        <ion-label>
+          <h3>Remote Working</h3>
+          <p>Ajukan remote working jika akan berkerja dari luar kantor</p>
+        </ion-label>
+      </ion-item>
+    </ion-card>
+
+    <ion-card>
+      <ion-item (click)="formIjin()">
+        <!-- <ion-avatar slot="start">
+          <img src="../../assets/user.jpg">
+        </ion-avatar> -->
+        <ion-label>
+          <h3>Ijin Kerja</h3>
+          <p>Ajukan remote working jika akan berkerja dari luar kantor</p>
+        </ion-label>
+      </ion-item>
+    </ion-card>
+
+    <ion-card>
+      <ion-item (click)="formCuti()">
+        <!-- <ion-avatar slot="start">
+          <img src="../../assets/user.jpg">
+        </ion-avatar> -->
+        <ion-label>
+          <h3>Cuti Kerja</h3>
+          <p>Ajukan remote working jika akan berkerja dari luar kantor</p>
+        </ion-label>
+      </ion-item>
+    </ion-card>
+
+      <!-- <ion-grid>
         <ion-row no-padding justify-content-start align-items-start>
-          <ion-col text-center size="4" (click)="formIjin()">
+          <ion-col text-center (click)="formIjin()">
             <ion-card>
               <ion-card-content>
                 <ion-icon name="calendar"></ion-icon>
@@ -72,7 +139,7 @@
               </ion-card-content>
             </ion-card>
           </ion-col>
-          <ion-col text-center size="4" (click)="formSakit()">
+          <ion-col text-center (click)="formSakit()">
             <ion-card>
               <ion-card-content>
                 <ion-icon name="medkit"></ion-icon>              
@@ -80,7 +147,7 @@
               </ion-card-content>
             </ion-card>
           </ion-col>
-          <ion-col text-center size="4" (click)="formCuti()">
+          <ion-col text-center (click)="formCuti()">
             <ion-card>
               <ion-card-content>
                 <ion-icon name="clipboard"></ion-icon>  
@@ -89,7 +156,6 @@
             </ion-card>
           </ion-col>
         </ion-row>
-      </ion-grid>
-    <!-- </ion-item> -->
+      </ion-grid> -->
   </ion-list>
 </ion-content>

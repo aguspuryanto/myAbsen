@@ -1,10 +1,16 @@
 import { Component, ViewChild, ElementRef, NgZone } from '@angular/core';
-import { Platform, NavController, AlertController } from 'ionic-angular';
+import { Platform, NavController, AlertController, LoadingController } from 'ionic-angular';
 
 import { Geolocation } from '@ionic-native/geolocation';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder';
 // import { Geocodio } from 'geocodio-library-node';
+import { 
+  BackgroundGeolocation, 
+  BackgroundGeolocationConfig,
+  BackgroundGeolocationResponse,
+  BackgroundGeolocationEvents
+ } from '@ionic-native/background-geolocation';
 
 import { HttpClient } from '@angular/common/http';
 import { FormijinPage } from '../formijin/formijin';
@@ -29,12 +35,20 @@ export class HomePage {
   // geocoder;
   // api_key: string = '62be5e223e43bbd5664ddd6523d5d5b5d64c226';
 
+  checkGeolocation:any;
+  datalocation:any;
+  status:any;
+
   now = new Date();
   time = this.now.getHours() * 60 + this.now.getMinutes();
 
+  _absenpagi: string = "07:30-08:40";
+  _absensiang: string = "12:00-13:00";
+  _absenpulang: string = "16:30-18:00";
+
   formabsensi: any = {};
 
-  constructor(public platform: Platform, public navCtrl: NavController, private alertCtrl: AlertController, private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, private nativeGeocoder: NativeGeocoder, private zone: NgZone, public httpClient: HttpClient, public api: ApiProvider) {
+  constructor(public platform: Platform, public navCtrl: NavController, private alertCtrl: AlertController, public loadingCtrl: LoadingController, private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, private nativeGeocoder: NativeGeocoder, private backgroundGeolocation: BackgroundGeolocation,private zone: NgZone, public httpClient: HttpClient, public api: ApiProvider) {
     // this.geocoder = new Geocodio('62be5e223e43bbd5664ddd6523d5d5b5d64c226');
   }
 
@@ -56,6 +70,7 @@ export class HomePage {
   
   ngOnInit() {
     this.requestAccuracy();
+    this.cekGPS();
     this.loadMap();
   }
 
@@ -116,6 +131,60 @@ export class HomePage {
     });
   }
 
+  cekGPS(){
+    if (this.platform.is('cordova')) {
+      // const loader = this.loadingCtrl.create({
+      //   content: "Please wait..."
+      // });
+      // loader.present();
+    
+      const config: BackgroundGeolocationConfig = {
+        desiredAccuracy: 10,
+        stationaryRadius: 20,
+        distanceFilter: 30,
+        debug: true, //  enable this hear sounds for background-geolocation life-cycle.
+        stopOnTerminate: true // enable this to clear background location settings when the app terminates
+      };
+
+      this.backgroundGeolocation.configure(config).then(() => {
+        this.checkGeolocation=this.backgroundGeolocation
+            .on(BackgroundGeolocationEvents.location)
+            .subscribe((location: BackgroundGeolocationResponse) => {
+
+              this.zone.run(() => {
+                this.datalocation=JSON.stringify(location);
+                console.log(location);
+              });
+              
+              if(location.isFromMockProvider==true){
+                this.status="Fake GPS detected!";
+                const alert = this.alertCtrl.create({
+                  subTitle: 'We detected you using the Fake GPS application. Turn off the application immediately.',
+                  buttons: ['OK']
+                });
+                alert.present();
+              }else{
+                this.status="";
+              }
+            });
+            // loader.dismiss();
+        });  
+   
+      this.backgroundGeolocation.start();
+    }
+      
+  }
+
+  CekStop(){
+    console.log("stop");
+    console.log(this.checkGeolocation)
+    this.datalocation="";
+    this.status="";
+    this.checkGeolocation.unsubscribe();
+    this.backgroundGeolocation.deleteAllLocations();
+    this.backgroundGeolocation.stop();
+  }
+
   getAddressFromCoords(lattitude, longitude) {
     // console.log("getAddressFromCoords " + lattitude + " " + longitude);
 
@@ -167,8 +236,7 @@ export class HomePage {
     //     let responseAddress = [];
     //     for (let [key, value] of Object.entries(result[0])) {
     //       if (value.length > 0)
-    //         responseAddress.push(value);
- 
+    //         responseAddress.push(value); 
     //     }
     //     responseAddress.reverse();
     //     for (let value of responseAddress) {
@@ -197,8 +265,8 @@ export class HomePage {
   }
 
   absenPagi(){
-    // 08:30-08:40
-    var start = 8 * 60 + 30;
+    // 07:30-08:40
+    var start = 7 * 60 + 30;
     var end   = 8 * 60 + 40;
 
     console.log(this.now.getHours() + ":" + ("0" + this.now.getMinutes()).substr(-2));
@@ -371,6 +439,18 @@ export class HomePage {
       buttons: ['Dismiss']
     });
     alert.present();
+  }
+
+  getAbsenTime(start, end){
+    return this.getTimestamp(start) + "-" + this.getTimestamp(end);
+  }
+
+  getTimestamp(timestamp){
+    var date  = new Date(timestamp),
+      hours   = date.getHours(),
+      minutes = date.getMinutes();
+
+    return ("0" + hours).slice(-2) + ':' + ("0" + minutes).slice(-2);
   }
   
 }

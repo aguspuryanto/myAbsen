@@ -7,6 +7,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { Geolocation } from '@ionic-native/geolocation';
 import { NativeGeocoder } from '@ionic-native/native-geocoder';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
+import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
 import { HttpClientModule } from '@angular/common/http';
 
 import { MyApp } from './app.component';
@@ -43,6 +44,7 @@ import { ApiProvider } from '../providers/api/api';
     Geolocation,
     NativeGeocoder,
     LocationAccuracy,
+    BackgroundGeolocation,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ApiProvider
   ]

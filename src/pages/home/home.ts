@@ -214,8 +214,8 @@ export class HomePage {
         .then((result: NativeGeocoderReverseResult[]) => {
           console.log("getAddressFromCoords reverseGeocode");
           localStorage.setItem('Geocode_' + lattitude+'_'+longitude, JSON.stringify(result[0]));
-          // this.address = result[0].subLocality + ", "+result[0].locality + ", "+result[0].subAdministrativeArea;
-          this.address = this.pretifyAddress(result[0]);
+          this.address = result[0].subLocality + ", "+result[0].locality + ", "+result[0].subAdministrativeArea;
+          // this.address = this.pretifyAddress(result[0]);
 
         })
         .catch((error: any) => {

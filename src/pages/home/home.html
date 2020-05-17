@@ -1,15 +1,11 @@
 <ion-header no-border>
   <ion-toolbar color="translucent">
-    <ion-title>AbsenBozz</ion-title>
+    <ion-title mode="ios">AbsenBozz</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content fullscreen>
   <div class="map-wrapper">
-    <!-- <button ion-button (click)="loadMap()" shape="round" color="dark">
-      <ion-icon slot="start" name="locate"></ion-icon>
-      Where I Am
-    </button> -->
     <div #map id="map"></div>
   </div>
  
@@ -17,12 +13,13 @@
     <ion-row>
       <ion-col>
         <ion-card>
-          <ion-item>
-            <ion-icon name="location"></ion-icon>
-          </ion-item>
+          <ion-card-header text-center>{{dayname}}, {{datatime | date:'dd/MM/yyyy @ HH:mm:ss'}}</ion-card-header>
           <ion-card-content>
-            <b>Check Point</b>
-            <p>{{address}}</p>
+            <ion-item text-wrap>
+              <ion-icon name="pin" item-start large></ion-icon>
+              <h2>Check Point</h2>
+              <p>{{address}}</p>
+            </ion-item>
           </ion-card-content>
         </ion-card>
       </ion-col>
@@ -94,38 +91,26 @@
       </button>
     </ion-list-header>
     <ion-card>
-      <ion-item (click)="formIjin()">
-        <!-- <ion-avatar slot="start">
-          <img src="../../assets/user.jpg">
-        </ion-avatar> -->
-        <ion-label>
-          <h3>Remote Working</h3>
-          <p>Ajukan remote working jika akan berkerja dari luar kantor</p>
-        </ion-label>
+      <ion-item (click)="formIjin()" text-wrap>
+        <ion-icon name="football" item-start large></ion-icon>
+        <h2>Remote Working</h2>
+        <p>Ajukan remote working jika akan berkerja dari luar kantor</p>
       </ion-item>
     </ion-card>
 
     <ion-card>
-      <ion-item (click)="formIjin()">
-        <!-- <ion-avatar slot="start">
-          <img src="../../assets/user.jpg">
-        </ion-avatar> -->
-        <ion-label>
-          <h3>Ijin Kerja</h3>
-          <p>Ajukan remote working jika akan berkerja dari luar kantor</p>
-        </ion-label>
+      <ion-item (click)="formIjin()" text-wrap>
+        <ion-icon name="football" item-start large></ion-icon>
+        <h2>Ijin Kerja</h2>
+        <p>Ajukan ijin kerja</p>
       </ion-item>
     </ion-card>
 
     <ion-card>
-      <ion-item (click)="formCuti()">
-        <!-- <ion-avatar slot="start">
-          <img src="../../assets/user.jpg">
-        </ion-avatar> -->
-        <ion-label>
-          <h3>Cuti Kerja</h3>
-          <p>Ajukan remote working jika akan berkerja dari luar kantor</p>
-        </ion-label>
+      <ion-item (click)="formCuti()" text-wrap>
+        <ion-icon name="football" item-start large></ion-icon>
+        <h2>Cuti Kerja</h2>
+        <p>Ajukan cuti kerja</p>
       </ion-item>
     </ion-card>
 

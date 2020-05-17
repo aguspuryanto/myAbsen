@@ -27,7 +27,7 @@ declare var google;
 export class HomePage {
   @ViewChild('map') mapElement: ElementRef;
   map: any;
-  address: string;
+  address: string = "...";
  
   latitude: number;
   longitude: number;
@@ -38,9 +38,12 @@ export class HomePage {
   checkGeolocation:any;
   datalocation:any;
   status:any;
-
+  
+  days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+  dayname: string;
   now = new Date();
-  time = this.now.getHours() * 60 + this.now.getMinutes();
+  time = this.now.getHours() * 60 + this.now.getMinutes();  
+  datatime: any;
 
   _absenpagi: string = "07:30-08:40";
   _absensiang: string = "12:00-13:00";
@@ -50,6 +53,17 @@ export class HomePage {
 
   constructor(public platform: Platform, public navCtrl: NavController, private alertCtrl: AlertController, public loadingCtrl: LoadingController, private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, private nativeGeocoder: NativeGeocoder, private backgroundGeolocation: BackgroundGeolocation,private zone: NgZone, public httpClient: HttpClient, public api: ApiProvider) {
     // this.geocoder = new Geocodio('62be5e223e43bbd5664ddd6523d5d5b5d64c226');
+    console.log('getDay', this.now.getDay());
+    this.dayname = this.days[this.now.getDay()];
+
+    setInterval(() => {
+      this.datatime = new Date();
+    //   var date = new Date(),
+    //   hours = date.getHours(),
+    //   minutes = date.getMinutes(),
+    //   seconds = date.getSeconds();
+    //   this.datatime = ("0" + hours).slice(-2) + ':' + ("0" + minutes).slice(-2) + ':' + ("0" + seconds).slice(-2);
+    }, 1000);
   }
 
   requestAccuracy() {

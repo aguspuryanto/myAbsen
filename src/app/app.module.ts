@@ -9,13 +9,14 @@ import { NativeGeocoder } from '@ionic-native/native-geocoder';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
 import { HttpClientModule } from '@angular/common/http';
+import { ApiProvider } from '../providers/api/api';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { FormijinPage } from '../pages/formijin/formijin';
 import { FormsakitPage } from '../pages/formsakit/formsakit';
 import { FormcutiPage } from '../pages/formcuti/formcuti';
-import { ApiProvider } from '../providers/api/api';
+import { ReportPage } from '../pages/report/report';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ApiProvider } from '../providers/api/api';
     HomePage,
     FormijinPage,
     FormsakitPage,
-    FormcutiPage
+    FormcutiPage,
+    ReportPage
   ],
   imports: [
     BrowserModule,
@@ -36,7 +38,8 @@ import { ApiProvider } from '../providers/api/api';
     HomePage,
     FormijinPage,
     FormsakitPage,
-    FormcutiPage
+    FormcutiPage,
+    ReportPage
   ],
   providers: [
     StatusBar,

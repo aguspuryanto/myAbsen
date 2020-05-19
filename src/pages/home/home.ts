@@ -13,10 +13,12 @@ import {
  } from '@ionic-native/background-geolocation';
 
 import { HttpClient } from '@angular/common/http';
+import { ApiProvider } from '../../providers/api/api';
+
 import { FormijinPage } from '../formijin/formijin';
 import { FormsakitPage } from '../formsakit/formsakit';
 import { FormcutiPage } from '../formcuti/formcuti';
-import { ApiProvider } from '../../providers/api/api';
+import { ReportPage } from '../report/report';
 
 declare var google;
 
@@ -444,6 +446,10 @@ export class HomePage {
 
   formCuti(){
     this.navCtrl.push(FormcutiPage);
+  }
+
+  goReport(){
+    this.navCtrl.push(ReportPage);
   }
 
   presentAlert(title: string, subtitle: string) {

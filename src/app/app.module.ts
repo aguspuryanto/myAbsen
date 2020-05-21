@@ -18,6 +18,8 @@ import { FormsakitPage } from '../pages/formsakit/formsakit';
 import { FormcutiPage } from '../pages/formcuti/formcuti';
 import { ReportPage } from '../pages/report/report';
 
+import { TabsPage } from '../pages/tabs/tabs';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -25,7 +27,8 @@ import { ReportPage } from '../pages/report/report';
     FormijinPage,
     FormsakitPage,
     FormcutiPage,
-    ReportPage
+    ReportPage,
+    TabsPage
   ],
   imports: [
     BrowserModule,
@@ -39,7 +42,8 @@ import { ReportPage } from '../pages/report/report';
     FormijinPage,
     FormsakitPage,
     FormcutiPage,
-    ReportPage
+    ReportPage,
+    TabsPage
   ],
   providers: [
     StatusBar,

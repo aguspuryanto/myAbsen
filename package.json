@@ -30,13 +30,13 @@
     "@ionic-native/splash-screen": "4.20.0",
     "@ionic-native/status-bar": "4.20.0",
     "@ionic/storage": "2.2.0",
+    "@mauron85/cordova-plugin-background-geolocation": "^3.1.0",
     "chart.js": "^2.9.3",
     "cordova-android": "^8.1.0",
     "cordova-plugin-add-swift-support": "^2.0.2",
     "cordova-plugin-android-permissions": "^1.0.2",
     "cordova-plugin-cleartext": "^1.0.0",
     "cordova-plugin-geolocation": "^4.0.2",
-    "cordova-plugin-mauron85-background-geolocation": "^3.0.0-alpha.50",
     "cordova-plugin-nativegeocoder": "^3.4.1",
     "cordova-plugin-request-location-accuracy": "^2.3.0",
     "geocodio-library-node": "^1.1.0",
@@ -74,7 +74,7 @@
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
       },
       "cordova-plugin-ionic-keyboard": {},
-      "cordova-plugin-mauron85-background-geolocation": {
+      "cordova-plugin-background-geolocation": {
         "GOOGLE_PLAY_SERVICES_VERSION": "11+",
         "ANDROID_SUPPORT_LIBRARY_VERSION": "26+",
         "ICON": "@mipmap/icon",

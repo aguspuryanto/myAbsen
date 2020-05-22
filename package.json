@@ -25,6 +25,7 @@
     "@ionic-native/background-geolocation": "^4.20.0",
     "@ionic-native/core": "4.20.0",
     "@ionic-native/geolocation": "^4.20.0",
+    "@ionic-native/local-notifications": "^4.20.0",
     "@ionic-native/location-accuracy": "^4.20.0",
     "@ionic-native/native-geocoder": "^4.20.0",
     "@ionic-native/splash-screen": "4.20.0",
@@ -83,7 +84,8 @@
         "ACCOUNT_LABEL": "@string/app_name",
         "ACCOUNT_TYPE": "$PACKAGE_NAME.account",
         "CONTENT_AUTHORITY": "$PACKAGE_NAME"
-      }
+      },
+      "cordova-plugin-local-notification": {}
     },
     "platforms": [
       "android"

@@ -209,13 +209,13 @@ export class HomePage {
     //   console.log('my data: ', data);
     // });
 
-    if(localStorage.getItem(lattitude+'_'+longitude) === null) {
+    this.address = "Tempel, Kecamatan Krian, Kabupaten Sidoarjo";
+
+    if(localStorage.getItem('Geocode_' + lattitude+'_'+longitude) === null) {
       let result = JSON.parse(localStorage.getItem('Geocode_' + lattitude+'_'+longitude) || '{}');
       console.log("getAddressFromCoords localStorage", JSON.stringify(result));
+      this.address = result.subLocality + ", "+result.locality + ", "+result.subAdministrativeArea + ", "+result.postalCode + ", "+result.administrativeArea;
     }
-    
-    //   this.address = result.subLocality + ", "+result.locality + ", "+result.subAdministrativeArea + ", "+result.postalCode + ", "+result.administrativeArea;
-      this.address = "Tempel, Kecamatan Krian, Kabupaten Sidoarjo";
 
     // } else {
 

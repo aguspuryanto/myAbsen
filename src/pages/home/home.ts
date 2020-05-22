@@ -92,15 +92,21 @@ export class HomePage implements OnInit {
     this.getAlarm();
   }
 
+  // https://www.joshmorony.com/getting-familiar-with-local-notifications-in-ionic-2/
   getAlarm(){
-    // Schedule delayed notification
-    this.localNotifications.schedule({
-      title: 'Local ILocalNotification Example',
-      text: 'Delayed ILocalNotification',
-      trigger: {at: new Date(new Date().getTime() + 3600)},
-      led: 'FF0000',
-      sound: null
-    });
+    if(this.platform.is('cordova')){
+      // Cancel any existing notifications
+      this.localNotifications.cancelAll().then(() => {
+        // Schedule delayed notification
+        this.localNotifications.schedule({
+          title: 'Local ILocalNotification Example',
+          text: 'Delayed ILocalNotification',
+          trigger: {at: new Date(new Date().getTime() + 3600)},
+          led: 'FF0000',
+          sound: null
+        });
+      });
+    }
   }
 
   loadMap() {

@@ -9,6 +9,7 @@ import { NativeGeocoder } from '@ionic-native/native-geocoder';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
 import { LocalNotifications } from '@ionic-native/local-notifications';
+import { Vibration } from '@ionic-native/vibration';
 import { HttpClientModule } from '@angular/common/http';
 import { ApiProvider } from '../providers/api/api';
 
@@ -54,6 +55,7 @@ import { TabsPage } from '../pages/tabs/tabs';
     LocationAccuracy,
     BackgroundGeolocation,
     LocalNotifications,
+    Vibration,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ApiProvider
   ]

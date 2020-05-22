@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, NgZone } from '@angular/core';
+import { Component, ViewChild, ElementRef, NgZone, OnInit } from '@angular/core';
 import { Platform, NavController, AlertController, LoadingController } from 'ionic-angular';
 
 import { Geolocation } from '@ionic-native/geolocation';
@@ -12,6 +12,7 @@ import {
   BackgroundGeolocationEvents
  } from '@ionic-native/background-geolocation';
 
+import { LocalNotifications } from '@ionic-native/local-notifications';
 import { HttpClient } from '@angular/common/http';
 import { ApiProvider } from '../../providers/api/api';
 
@@ -26,7 +27,7 @@ declare var google;
   selector: 'page-home',
   templateUrl: 'home.html'
 })
-export class HomePage {
+export class HomePage implements OnInit {
   @ViewChild('map') mapElement: ElementRef;
   map: any;
   address: string = "...";
@@ -53,7 +54,7 @@ export class HomePage {
 
   formabsensi: any = {};
 
-  constructor(public platform: Platform, public navCtrl: NavController, private alertCtrl: AlertController, public loadingCtrl: LoadingController, private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, private nativeGeocoder: NativeGeocoder, private backgroundGeolocation: BackgroundGeolocation,private zone: NgZone, public httpClient: HttpClient, public api: ApiProvider) {
+  constructor(public platform: Platform, public navCtrl: NavController, private alertCtrl: AlertController, public loadingCtrl: LoadingController, private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, private nativeGeocoder: NativeGeocoder, private backgroundGeolocation: BackgroundGeolocation,private zone: NgZone, public httpClient: HttpClient, public api: ApiProvider, private localNotifications: LocalNotifications) {
     // this.geocoder = new Geocodio('62be5e223e43bbd5664ddd6523d5d5b5d64c226');
     console.log('getDay', this.now.getDay());
     this.dayname = this.days[this.now.getDay()];
@@ -88,6 +89,18 @@ export class HomePage {
     this.requestAccuracy();
     this.cekGPS();
     this.loadMap();
+    this.getAlarm();
+  }
+
+  getAlarm(){
+    // Schedule delayed notification
+    this.localNotifications.schedule({
+      title: 'Local ILocalNotification Example',
+      text: 'Delayed ILocalNotification',
+      trigger: {at: new Date(new Date().getTime() + 3600)},
+      led: 'FF0000',
+      sound: null
+    });
   }
 
   loadMap() {

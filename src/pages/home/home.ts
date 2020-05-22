@@ -97,14 +97,20 @@ export class HomePage implements OnInit {
     if(this.platform.is('cordova')){
       // Cancel any existing notifications
       this.localNotifications.cancelAll().then(() => {
+        
         // Schedule delayed notification
+        // let date = new Date(new Date().getTime() + 5 * 1000);
         this.localNotifications.schedule({
+          id: 1,
           title: 'Local ILocalNotification Example',
           text: 'Delayed ILocalNotification',
           trigger: {at: new Date(new Date().getTime() + 3600)},
-          led: 'FF0000',
-          sound: null
+          vibrate: true
+          //led: 'FF0000',
+          //sound: null
+          //every: 'day'
         });
+        
       });
     }
   }

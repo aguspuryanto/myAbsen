@@ -13,6 +13,8 @@ import {
  } from '@ionic-native/background-geolocation';
 
 import { LocalNotifications } from '@ionic-native/local-notifications';
+import { Vibration } from '@ionic-native/vibration';
+
 import { HttpClient } from '@angular/common/http';
 import { ApiProvider } from '../../providers/api/api';
 
@@ -54,7 +56,7 @@ export class HomePage implements OnInit {
 
   formabsensi: any = {};
 
-  constructor(public platform: Platform, public navCtrl: NavController, private alertCtrl: AlertController, public loadingCtrl: LoadingController, private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, private nativeGeocoder: NativeGeocoder, private backgroundGeolocation: BackgroundGeolocation,private zone: NgZone, public httpClient: HttpClient, public api: ApiProvider, private localNotifications: LocalNotifications) {
+  constructor(public platform: Platform, public navCtrl: NavController, private alertCtrl: AlertController, public loadingCtrl: LoadingController, private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, private nativeGeocoder: NativeGeocoder, private backgroundGeolocation: BackgroundGeolocation,private zone: NgZone, public httpClient: HttpClient, public api: ApiProvider, private localNotifications: LocalNotifications, private vibration: Vibration) {
     // this.geocoder = new Geocodio('62be5e223e43bbd5664ddd6523d5d5b5d64c226');
     console.log('getDay', this.now.getDay());
     this.dayname = this.days[this.now.getDay()];
@@ -99,18 +101,22 @@ export class HomePage implements OnInit {
       this.localNotifications.cancelAll().then(() => {
         
         // Schedule delayed notification
-        // let date = new Date(new Date().getTime() + 5 * 1000);
+        let date = new Date(new Date().getTime() + 3600);
         this.localNotifications.schedule({
           id: 1,
-          title: 'Local ILocalNotification Example',
+          // title: 'Local ILocalNotification Example',
           text: 'Delayed ILocalNotification',
-          trigger: {at: new Date(new Date().getTime() + 3600)},
-          vibrate: true
-          //led: 'FF0000',
-          //sound: null
+          trigger: {at: date},
+          foreground:true,
+          vibrate: true,
+          led: {color: '#FF00FF', on: 500, off: 500},
+          data: {mydata: 'My hidden message this is'},
+          // sound: this.platform.is('android') ? 'file://assets/sounds/Rooster.mp3' : null,
           //every: 'day'
         });
-        
+
+        this.vibration.vibrate(1000);
+
       });
     }
   }

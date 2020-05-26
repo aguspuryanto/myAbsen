@@ -82,7 +82,8 @@
         "ACCOUNT_LABEL": "@string/app_name",
         "ACCOUNT_TYPE": "$PACKAGE_NAME.account",
         "CONTENT_AUTHORITY": "$PACKAGE_NAME"
-      }
+      },
+      "cordova-plugin-background-geolocation": {}
     },
     "platforms": [
       "android"

@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, NgZone } from '@angular/core';
+import { Component, ViewChild, ElementRef, NgZone, OnInit } from '@angular/core';
 import { Platform, NavController, AlertController, LoadingController } from 'ionic-angular';
 
 import { Geolocation } from '@ionic-native/geolocation';
@@ -24,7 +24,7 @@ declare var google;
   selector: 'page-home',
   templateUrl: 'home.html'
 })
-export class HomePage {
+export class HomePage implements OnInit {
   @ViewChild('map') mapElement: ElementRef;
   map: any;
   address: string = "...";

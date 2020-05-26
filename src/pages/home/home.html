@@ -1,19 +1,28 @@
 <ion-header no-border>
   <ion-toolbar color="translucent">
     <ion-title mode="ios">AbsenBozz</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="getAlarm()">
+        <ion-icon name="notifications"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content fullscreen>
   <div class="map-wrapper">
     <div #map id="map"></div>
+    <div padding text-center style="padding-bottom: 0px;">
+      <!-- <h4>{{dayname}}</h4> -->
+      <h4>{{datatime | date:'dd/MM/yyyy @ HH:mm:ss'}}</h4>
+    </div>
   </div>
- 
-  <ion-grid class="grid-bordered">
+
+  <ion-grid class="grid-bordered" style="padding: 0px;">
     <ion-row>
       <ion-col>
         <ion-card>
-          <ion-card-header text-center>{{dayname}}, {{datatime | date:'dd/MM/yyyy @ HH:mm:ss'}}</ion-card-header>
+          <!-- <ion-card-header text-center>{{dayname}}, {{datatime | date:'dd/MM/yyyy @ HH:mm:ss'}}</ion-card-header> -->
           <ion-card-content>
             <ion-item text-wrap>
               <ion-icon name="pin" item-start large></ion-icon>
@@ -92,7 +101,7 @@
     </ion-list-header>
     <ion-card>
       <ion-item (click)="formIjin()" text-wrap>
-        <ion-icon name="football" item-start large></ion-icon>
+        <ion-icon name="code-working" item-start large></ion-icon>
         <h2>Remote Working</h2>
         <p>Ajukan remote working jika akan berkerja dari luar kantor</p>
       </ion-item>
@@ -100,7 +109,7 @@
 
     <ion-card>
       <ion-item (click)="formIjin()" text-wrap>
-        <ion-icon name="football" item-start large></ion-icon>
+        <ion-icon name="clipboard" item-start large></ion-icon>
         <h2>Ijin Kerja</h2>
         <p>Ajukan ijin kerja</p>
       </ion-item>
@@ -108,9 +117,17 @@
 
     <ion-card>
       <ion-item (click)="formCuti()" text-wrap>
-        <ion-icon name="football" item-start large></ion-icon>
+        <ion-icon name="clipboard" item-start large></ion-icon>
         <h2>Cuti Kerja</h2>
         <p>Ajukan cuti kerja</p>
+      </ion-item>
+    </ion-card>
+
+    <ion-card>
+      <ion-item (click)="goReport()" text-wrap>
+        <ion-icon name="stats" item-start large></ion-icon>
+        <h2>Report</h2>
+        <p>Laporan Harian</p>
       </ion-item>
     </ion-card>
 

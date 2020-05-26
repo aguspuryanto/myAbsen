@@ -8,14 +8,19 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { NativeGeocoder } from '@ionic-native/native-geocoder';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
+import { LocalNotifications } from '@ionic-native/local-notifications';
+import { Vibration } from '@ionic-native/vibration';
 import { HttpClientModule } from '@angular/common/http';
+import { ApiProvider } from '../providers/api/api';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { FormijinPage } from '../pages/formijin/formijin';
 import { FormsakitPage } from '../pages/formsakit/formsakit';
 import { FormcutiPage } from '../pages/formcuti/formcuti';
-import { ApiProvider } from '../providers/api/api';
+import { ReportPage } from '../pages/report/report';
+
+import { TabsPage } from '../pages/tabs/tabs';
 
 @NgModule({
   declarations: [
@@ -23,7 +28,9 @@ import { ApiProvider } from '../providers/api/api';
     HomePage,
     FormijinPage,
     FormsakitPage,
-    FormcutiPage
+    FormcutiPage,
+    ReportPage,
+    TabsPage
   ],
   imports: [
     BrowserModule,
@@ -36,7 +43,9 @@ import { ApiProvider } from '../providers/api/api';
     HomePage,
     FormijinPage,
     FormsakitPage,
-    FormcutiPage
+    FormcutiPage,
+    ReportPage,
+    TabsPage
   ],
   providers: [
     StatusBar,
@@ -45,6 +54,8 @@ import { ApiProvider } from '../providers/api/api';
     NativeGeocoder,
     LocationAccuracy,
     BackgroundGeolocation,
+    LocalNotifications,
+    Vibration,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ApiProvider
   ]

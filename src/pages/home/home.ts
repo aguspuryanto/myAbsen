@@ -12,11 +12,16 @@ import {
   BackgroundGeolocationEvents
  } from '@ionic-native/background-geolocation';
 
+import { LocalNotifications } from '@ionic-native/local-notifications';
+import { Vibration } from '@ionic-native/vibration';
+
 import { HttpClient } from '@angular/common/http';
+import { ApiProvider } from '../../providers/api/api';
+
 import { FormijinPage } from '../formijin/formijin';
 import { FormsakitPage } from '../formsakit/formsakit';
 import { FormcutiPage } from '../formcuti/formcuti';
-import { ApiProvider } from '../../providers/api/api';
+import { ReportPage } from '../report/report';
 
 declare var google;
 
@@ -51,7 +56,7 @@ export class HomePage implements OnInit {
 
   formabsensi: any = {};
 
-  constructor(public platform: Platform, public navCtrl: NavController, private alertCtrl: AlertController, public loadingCtrl: LoadingController, private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, private nativeGeocoder: NativeGeocoder, private backgroundGeolocation: BackgroundGeolocation,private zone: NgZone, public httpClient: HttpClient, public api: ApiProvider) {
+  constructor(public platform: Platform, public navCtrl: NavController, private alertCtrl: AlertController, public loadingCtrl: LoadingController, private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, private nativeGeocoder: NativeGeocoder, private backgroundGeolocation: BackgroundGeolocation,private zone: NgZone, public httpClient: HttpClient, public api: ApiProvider, private localNotifications: LocalNotifications, private vibration: Vibration) {
     // this.geocoder = new Geocodio('62be5e223e43bbd5664ddd6523d5d5b5d64c226');
     console.log('getDay', this.now.getDay());
     this.dayname = this.days[this.now.getDay()];
@@ -86,6 +91,34 @@ export class HomePage implements OnInit {
     this.requestAccuracy();
     this.cekGPS();
     this.loadMap();
+    this.getAlarm();
+  }
+
+  // https://www.joshmorony.com/getting-familiar-with-local-notifications-in-ionic-2/
+  getAlarm(){
+    if(this.platform.is('cordova')){
+      // Cancel any existing notifications
+      this.localNotifications.cancelAll().then(() => {
+        
+        // Schedule delayed notification
+        let date = new Date(new Date().getTime() + 3600);
+        this.localNotifications.schedule({
+          id: 1,
+          // title: 'Local ILocalNotification Example',
+          text: 'Delayed ILocalNotification',
+          trigger: {at: date},
+          foreground:true,
+          vibrate: true,
+          led: {color: '#FF00FF', on: 500, off: 500},
+          data: {mydata: 'My hidden message this is'},
+          // sound: this.platform.is('android') ? 'file://assets/sounds/Rooster.mp3' : null,
+          //every: 'day'
+        });
+
+        this.vibration.vibrate(1000);
+
+      });
+    }
   }
 
   loadMap() {
@@ -207,13 +240,13 @@ export class HomePage implements OnInit {
     //   console.log('my data: ', data);
     // });
 
-    if(localStorage.getItem(lattitude+'_'+longitude) === null) {
+    this.address = "Tempel, Kecamatan Krian, Kabupaten Sidoarjo";
+
+    if(localStorage.getItem('Geocode_' + lattitude+'_'+longitude) === null) {
       let result = JSON.parse(localStorage.getItem('Geocode_' + lattitude+'_'+longitude) || '{}');
       console.log("getAddressFromCoords localStorage", JSON.stringify(result));
+      this.address = result.subLocality + ", "+result.locality + ", "+result.subAdministrativeArea + ", "+result.postalCode + ", "+result.administrativeArea;
     }
-    
-    //   this.address = result.subLocality + ", "+result.locality + ", "+result.subAdministrativeArea + ", "+result.postalCode + ", "+result.administrativeArea;
-      this.address = "Tempel, Kecamatan Krian, Kabupaten Sidoarjo";
 
     // } else {
 
@@ -444,6 +477,10 @@ export class HomePage implements OnInit {
 
   formCuti(){
     this.navCtrl.push(FormcutiPage);
+  }
+
+  goReport(){
+    this.navCtrl.push(ReportPage);
   }
 
   presentAlert(title: string, subtitle: string) {

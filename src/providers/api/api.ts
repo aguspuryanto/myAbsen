@@ -14,6 +14,9 @@ export class ApiProvider {
   // apiUrl: string = "http://localhost/myabsenweb/api/";
   apiUrl: string = "http://mysod.xyz/myabsenweb/api/";
 
+  UPLOAD_URL: string = "https://mysod.xyz/myabsenweb/api/uploadImage/";
+  ABSENSI_IN_URL: string = 'https://mysod.xyz/myabsenweb/api/absensiIn';
+
   constructor(public loadingCtrl: LoadingController, public http: HttpClient) {
     console.log('Hello ApiProvider Provider');
   }  
@@ -63,6 +66,17 @@ export class ApiProvider {
 
   postAbsensi(params){
     return this.post('frmabsensi', params);
+  }
+
+  // https://mysod.xyz/myabsenweb/api/absensiIn
+  absensiIn(params){
+    return this.post('absensiIn', params);
+  }
+
+  getReportAbsensi(){
+    // http://mysod.xyz/myabsenweb/index.php/Welcome/apiAbsensi
+    // http://mysod.xyz/myabsenweb/reportabsensi
+    return this.get('reportabsensi');
   }
 
   async loadingshow(){

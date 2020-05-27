@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef, NgZone, OnInit } from '@angular/core';
-import { Platform, NavController, AlertController, LoadingController } from 'ionic-angular';
+import { Platform, NavController, AlertController, LoadingController, ToastController, Loading } from 'ionic-angular';
 
 import { Geolocation } from '@ionic-native/geolocation';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
@@ -14,6 +14,8 @@ import {
 
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Vibration } from '@ionic-native/vibration';
+import { Camera, CameraOptions } from '@ionic-native/camera';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 
 import { HttpClient } from '@angular/common/http';
 import { ApiProvider } from '../../providers/api/api';
@@ -53,21 +55,23 @@ export class HomePage implements OnInit {
   _absenpagi: string = "07:30-08:40";
   _absensiang: string = "12:00-13:00";
   _absenpulang: string = "16:30-18:00";
+  _paket: string;
 
   formabsensi: any = {};
 
-  constructor(public platform: Platform, public navCtrl: NavController, private alertCtrl: AlertController, public loadingCtrl: LoadingController, private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, private nativeGeocoder: NativeGeocoder, private backgroundGeolocation: BackgroundGeolocation,private zone: NgZone, public httpClient: HttpClient, public api: ApiProvider, private localNotifications: LocalNotifications, private vibration: Vibration) {
+  clickSub: any;
+  imageURI: any;
+  userData: any;
+  loading: Loading;
+
+  constructor(public platform: Platform, public navCtrl: NavController, private alertCtrl: AlertController, public loadingCtrl: LoadingController, private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, private nativeGeocoder: NativeGeocoder, private backgroundGeolocation: BackgroundGeolocation,private zone: NgZone, public httpClient: HttpClient, public api: ApiProvider, private localNotifications: LocalNotifications, private vibration: Vibration, private camera: Camera, private transfer: FileTransfer, public toastCtrl: ToastController) {
     // this.geocoder = new Geocodio('62be5e223e43bbd5664ddd6523d5d5b5d64c226');
     console.log('getDay', this.now.getDay());
     this.dayname = this.days[this.now.getDay()];
+    this._paket = 'basic';
 
     setInterval(() => {
       this.datatime = new Date();
-    //   var date = new Date(),
-    //   hours = date.getHours(),
-    //   minutes = date.getMinutes(),
-    //   seconds = date.getSeconds();
-    //   this.datatime = ("0" + hours).slice(-2) + ':' + ("0" + minutes).slice(-2) + ':' + ("0" + seconds).slice(-2);
     }, 1000);
   }
 
@@ -91,7 +95,7 @@ export class HomePage implements OnInit {
     this.requestAccuracy();
     this.cekGPS();
     this.loadMap();
-    this.getAlarm();
+    // this.getAlarm();
   }
 
   // https://www.joshmorony.com/getting-familiar-with-local-notifications-in-ionic-2/
@@ -99,6 +103,12 @@ export class HomePage implements OnInit {
     if(this.platform.is('cordova')){
       // Cancel any existing notifications
       this.localNotifications.cancelAll().then(() => {
+
+        this.clickSub = this.localNotifications.on('click').subscribe(data => {
+          console.log(data);
+          this.presentAlert('Alert', 'Your notifiations contains a secret = ' + data.data.secret);
+          this.clickSub.unsubscribe();
+        });
         
         // Schedule delayed notification
         let date = new Date(new Date().getTime() + 3600);
@@ -110,7 +120,7 @@ export class HomePage implements OnInit {
           foreground:true,
           vibrate: true,
           led: {color: '#FF00FF', on: 500, off: 500},
-          data: {mydata: 'My hidden message this is'},
+          data: {secret: 'My hidden message this is'},
           // sound: this.platform.is('android') ? 'file://assets/sounds/Rooster.mp3' : null,
           //every: 'day'
         });
@@ -136,19 +146,19 @@ export class HomePage implements OnInit {
 
         this.getAddressFromCoords(this.latitude, this.longitude);
 
-        // let latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
-        // let mapOptions = {
-        //   center: latLng,
-        //   zoom: 15,
-        //   mapTypeId: google.maps.MapTypeId.ROADMAP
-        // }
+        let latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
+        let mapOptions = {
+          center: latLng,
+          zoom: 15,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
 
-        // this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-        //  this.map.addListener('dragend', () => { 
-        //   this.latitude = this.map.center.lat();
-        //   this.longitude = this.map.center.lng();
-        //    // this.getAddressFromCoords(this.map.center.lat(), this.map.center.lng())
-        // });
+        this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+         this.map.addListener('dragend', () => { 
+          this.latitude = this.map.center.lat();
+          this.longitude = this.map.center.lng();
+           // this.getAddressFromCoords(this.map.center.lat(), this.map.center.lng())
+        });
 
       }).catch((error) => {
         console.log('Error getting location', error);
@@ -156,7 +166,7 @@ export class HomePage implements OnInit {
       });
 
       let watchOptions = {
-        frequency: 3000,
+        frequency: 1000,
         timeout : 3000,
         enableHighAccuracy: true
       };
@@ -210,8 +220,6 @@ export class HomePage implements OnInit {
                   buttons: ['OK']
                 });
                 alert.present();
-              }else{
-                this.status="";
               }
             });
             // loader.dismiss();
@@ -261,7 +269,7 @@ export class HomePage implements OnInit {
         .then((result: NativeGeocoderReverseResult[]) => {
           console.log("getAddressFromCoords reverseGeocode");
           localStorage.setItem('Geocode_' + lattitude+'_'+longitude, JSON.stringify(result[0]));
-          this.address = result[0].subLocality + ", "+result[0].locality + ", "+result[0].subAdministrativeArea;
+          if(result[0].subLocality!==undefined) this.address = result[0].subLocality + ", "+result[0].locality + ", "+result[0].subAdministrativeArea;
           // this.address = this.pretifyAddress(result[0]);
 
         })
@@ -315,6 +323,10 @@ export class HomePage implements OnInit {
     // 07:30-08:40
     var start = 7 * 60 + 30;
     var end   = 8 * 60 + 40;
+
+    if(this._paket == 'basic'){
+      // foto selfie
+    }
 
     console.log(this.now.getHours() + ":" + ("0" + this.now.getMinutes()).substr(-2));
 
@@ -502,6 +514,134 @@ export class HomePage implements OnInit {
       minutes = date.getMinutes();
 
     return ("0" + hours).slice(-2) + ':' + ("0" + minutes).slice(-2);
+  }
+
+  // Paket : Basic, Bisnis, Pro
+  getImage() {
+    //Foto
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      sourceType:  this.camera.PictureSourceType.CAMERA,
+      correctOrientation: true,
+      encodingType: this.camera.EncodingType.JPEG,
+      targetWidth: 350,
+      targetHeight: 350,
+      saveToPhotoAlbum: false
+      // allowEdit : true,
+      // mediaType: this.camera.MediaType.PICTURE
+    }
+  
+    this.camera.getPicture(options).then((imageData) => {
+      let base64data = 'data:image/jpeg;base64,' + imageData;
+      this.imageURI = base64data;
+
+    }, (err) => {
+      // Handle error
+      console.log("Camera issue:" + err);
+      this.presentToast(err);
+    });
+  }
+
+  uploadFile() {
+    // console.log("imageURI:" + this.imageURI);
+    this.showLoading();
+
+    // setTimeout(() => {
+    //   loader.dismiss();
+    // }, 5000);
+
+    var d = new Date(),
+        n = d.getTime(),
+        newFileName = n + ".jpg";
+
+    const fileTransfer: FileTransferObject = this.transfer.create();
+  
+    let options: FileUploadOptions = {
+      fileKey: "photo",
+      fileName: newFileName,
+      chunkedMode: false,
+      mimeType: "image/jpeg",
+      headers: {},
+    }
+
+    fileTransfer.upload(this.imageURI, this.api.UPLOAD_URL, options)
+      .then((data) => {
+      console.log("226_Image uploaded successfully:", data);
+      // this.loading.dismiss();
+
+      this.userData.photo = newFileName;
+      // this.userData.type = this.checkIn;
+      this.userData.checkpoint_in = 0;
+      this.userData.checkpoint_out = 0;
+
+      // if(this.checkIn==false){
+      //   this.userData.checkpoint_in = this.checkinPoint;
+      // } else {
+      //   this.userData.checkpoint_out = this.checkinPoint;
+      // }
+      // console.log("397_userData", this.userData);
+
+      this.api.absensiIn(this.userData).then(data => {
+        console.log('402_absensiIn', data);
+        if (data) {
+          // reset
+          this.imageURI = null;
+          // if(this.userData.username){
+          //   this.navCtrl.push(ListPage, {
+          //     username: this.userData.username
+          //   });
+          // } else {
+            this.presentToast(data);
+          // }
+        } else {
+          this.showError("Absensi Gagal");
+        }
+      },error => {
+        this.showError(error);
+      });
+
+    }, (err) => {
+      this.loading.dismiss();
+      this.presentToast(err);
+    });
+
+  }
+
+  presentToast(msg) {
+    let toast = this.toastCtrl.create({
+      message: JSON.stringify(msg),
+      duration: 3000,
+      position: 'bottom'
+    });
+  
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+  
+    toast.present();
+  }
+
+  async showLoading() {
+    this.loading = await this.loadingCtrl.create({
+      content: 'Please wait...',
+      dismissOnPageChange: true,
+      enableBackdropDismiss: true,
+      showBackdrop: true,
+      duration: 2000
+    });
+    await this.loading.present();
+  }
+
+  showError(text) {
+    this.loading.dismiss();
+
+    let alert = this.alertCtrl.create({
+      title: 'Fail',
+      subTitle: text,
+      buttons: ['OK']
+    });
+    alert.present();
   }
   
 }

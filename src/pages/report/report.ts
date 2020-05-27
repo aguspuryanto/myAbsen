@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { Chart } from 'chart.js';
+import { ApiProvider } from '../../providers/api/api';
 
 /**
  * Generated class for the ReportPage page.
@@ -24,7 +25,7 @@ export class ReportPage implements OnInit {
   private doughnutChart: Chart;
   private lineChart: Chart;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api: ApiProvider) {
   }
 
   ionViewDidLoad() {
@@ -32,6 +33,10 @@ export class ReportPage implements OnInit {
   }
 
   ngOnInit() {
+    // 
+  }
+
+  getbarChart(){
     this.barChart = new Chart(this.barCanvas.nativeElement, {
       type: "bar",
       data: {
@@ -72,7 +77,9 @@ export class ReportPage implements OnInit {
         }
       }
     });
+  }
 
+  getdoughnutChart(){
     this.doughnutChart = new Chart(this.doughnutCanvas.nativeElement, {
       type: "doughnut",
       data: {
@@ -94,7 +101,9 @@ export class ReportPage implements OnInit {
         ]
       }
     });
+  }
 
+  getlineChart(){
     this.lineChart = new Chart(this.lineCanvas.nativeElement, {
       type: "line",
       data: {

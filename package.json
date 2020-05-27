@@ -92,12 +92,20 @@
         "ACCOUNT_TYPE": "$PACKAGE_NAME.account",
         "CONTENT_AUTHORITY": "$PACKAGE_NAME"
       },
+<<<<<<< HEAD
+      "cordova-plugin-background-geolocation": {}
+=======
       "cordova-plugin-local-notification": {},
+<<<<<<< HEAD
       "cordova-plugin-vibration": {},
       "cordova-plugin-camera": {
         "ANDROID_SUPPORT_V4_VERSION": "27.+"
       },
       "cordova-plugin-file-transfer": {}
+=======
+      "cordova-plugin-vibration": {}
+>>>>>>> f1365265a711cc3aba1cadd09e52b8fa8876bd2d
+>>>>>>> d0085997e5400261dc0b1b1ebdd8b21b60cbb54b
     },
     "platforms": [
       "android"

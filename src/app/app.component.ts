@@ -10,23 +10,15 @@ import {
   BackgroundGeolocationEvents
  } from '@ionic-native/background-geolocation';
 
-import { HomePage } from '../pages/home/home';
-<<<<<<< HEAD
-=======
+// import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
->>>>>>> f1365265a711cc3aba1cadd09e52b8fa8876bd2d
 
 @Component({
   templateUrl: 'app.html'
 })
-<<<<<<< HEAD
 export class MyApp implements OnInit {
-  rootPage:any = HomePage;
-=======
-export class MyApp {
   // rootPage:any = HomePage;
   rootPage:any = TabsPage;
->>>>>>> f1365265a711cc3aba1cadd09e52b8fa8876bd2d
 
   constructor(public platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private backgroundGeolocation: BackgroundGeolocation) {
     platform.ready().then(() => {

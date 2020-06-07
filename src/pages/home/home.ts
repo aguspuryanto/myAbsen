@@ -65,10 +65,16 @@ export class HomePage implements OnInit {
   loading: Loading;
 
   constructor(public platform: Platform, public navCtrl: NavController, private alertCtrl: AlertController, public loadingCtrl: LoadingController, private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, private nativeGeocoder: NativeGeocoder, private backgroundGeolocation: BackgroundGeolocation,private zone: NgZone, public httpClient: HttpClient, public api: ApiProvider, private localNotifications: LocalNotifications, private vibration: Vibration, private camera: Camera, private transfer: FileTransfer, public toastCtrl: ToastController) {
-    // this.geocoder = new Geocodio('62be5e223e43bbd5664ddd6523d5d5b5d64c226');
-    console.log('getDay', this.now.getDay());
-    this.dayname = this.days[this.now.getDay()];
-    this._paket = 'basic';
+
+    this.platform.ready().then(()=>{
+      // navigator.geolocation.getCurrentPosition(this.showPosition, this.errorHandler, {maximumAge:60000, timeout:5000, enableHighAccuracy:true});
+
+      // console.log("Device Ready");
+      // this.geocoder = new Geocodio('62be5e223e43bbd5664ddd6523d5d5b5d64c226');
+      // console.log('getDay', this.now.getDay());
+      this.dayname = this.days[this.now.getDay()];
+      this._paket = 'basic';
+    });
 
     setInterval(() => {
       this.datatime = new Date();
@@ -131,65 +137,67 @@ export class HomePage implements OnInit {
     }
   }
 
+  // https://baadiersydow.com/ionic-google-maps-geolocation-native-javascript-ios-android/
   loadMap() {
     return new Promise((resolve, reject) => {
-      let options = {
-        enableHighAccuracy: true,
-        maximumAge : 60000,
-        timeout : 10000
-      };
+      // let options = {
+      //   enableHighAccuracy: true, maximumAge : 60000, timeout : 10000
+      // };
 
-      this.geolocation.getCurrentPosition(options).then((resp) => {
+      // this.geolocation.getCurrentPosition(options).then((resp) => {
 
-        this.latitude = resp.coords.latitude;
-        this.longitude = resp.coords.longitude;
+      //   this.latitude = resp.coords.latitude;
+      //   this.longitude = resp.coords.longitude;
 
-        this.getAddressFromCoords(this.latitude, this.longitude);
+      //   this.getAddressFromCoords(this.latitude, this.longitude);
 
-        let latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
-        let mapOptions = {
-          center: latLng,
-          zoom: 15,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        }
+      //   let latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
+      //   let mapOptions = {
+      //     center: latLng,
+      //     zoom: 15,
+      //     mapTypeId: google.maps.MapTypeId.ROADMAP
+      //   }
 
-        this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-         this.map.addListener('dragend', () => { 
-          this.latitude = this.map.center.lat();
-          this.longitude = this.map.center.lng();
-           // this.getAddressFromCoords(this.map.center.lat(), this.map.center.lng())
+      //   this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+      //    this.map.addListener('dragend', () => { 
+      //     this.latitude = this.map.center.lat();
+      //     this.longitude = this.map.center.lng();
+      //      // this.getAddressFromCoords(this.map.center.lat(), this.map.center.lng())
+      //   });
+
+      // }).catch((error) => {
+      //   console.log('Error getting location', error);
+      //   this.address = error.message;
+      // });
+
+      if(this.platform.is('cordova') && (this.platform.is('ios') || this.platform.is('android'))){
+
+        let watchOptions = {
+          enableHighAccuracy: true, timeout: 60000, frequency: 1000, maximumAge: 0
+        };
+
+        let watch = this.geolocation.watchPosition(watchOptions);
+        watch.subscribe((data) => {
+          console.log("watchPosition", data);
+          // this.address = data.message;
+          if(!data){
+            this.zone.run(() => {
+              this.latitude = data.coords.latitude;
+              this.longitude = data.coords.longitude;
+              this.getAddressFromCoords(this.latitude, this.longitude);
+            });
+          }
+        }, function(error) {
+          console.log('Error w/ watchPosition: ' +JSON.stringify(error));
         });
 
-      }).catch((error) => {
-        console.log('Error getting location', error);
-        this.address = error.message;
-      });
-
-      let watchOptions = {
-        frequency: 1000,
-        timeout : 3000,
-        enableHighAccuracy: true
       };
 
-      let watch = this.geolocation.watchPosition(watchOptions);
-      watch.subscribe((data) => {
-        console.log("watchPosition", data);
-        // this.address = data.message;
-        if(!data){
-          this.zone.run(() => {
-            this.latitude = data.coords.latitude;
-            this.longitude = data.coords.longitude;
-            this.getAddressFromCoords(this.latitude, this.longitude);
-          });
-        }
-      }, function(error) {
-        console.log('Error w/ watchPosition: ' +JSON.stringify(error));
-      });
     });
   }
 
   cekGPS(){
-    if (this.platform.is('cordova')) {
+    if(this.platform.is('cordova') && (this.platform.is('ios') || this.platform.is('android'))){
       // const loader = this.loadingCtrl.create({
       //   content: "Please wait..."
       // });
@@ -258,7 +266,7 @@ export class HomePage implements OnInit {
 
     // } else {
 
-      if (this.platform.is('cordova')) {
+      if(this.platform.is('cordova') && (this.platform.is('ios') || this.platform.is('android'))){
         let options: NativeGeocoderOptions = {
           useLocale: true,
           maxResults: 5

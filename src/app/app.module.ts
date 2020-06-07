@@ -11,6 +11,8 @@ import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Vibration } from '@ionic-native/vibration';
 import { HttpClientModule } from '@angular/common/http';
+import { Camera } from '@ionic-native/camera';
+import { FileTransfer } from '@ionic-native/file-transfer';
 import { ApiProvider } from '../providers/api/api';
 
 import { MyApp } from './app.component';
@@ -56,6 +58,8 @@ import { TabsPage } from '../pages/tabs/tabs';
     BackgroundGeolocation,
     LocalNotifications,
     Vibration,
+    Camera,
+    FileTransfer,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ApiProvider
   ]

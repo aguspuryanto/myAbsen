@@ -64,6 +64,8 @@ export class HomePage implements OnInit {
   userData: any;
   loading: Loading;
 
+  timer: any;
+
   constructor(public platform: Platform, public navCtrl: NavController, private alertCtrl: AlertController, public loadingCtrl: LoadingController, private geolocation: Geolocation, private locationAccuracy: LocationAccuracy, private nativeGeocoder: NativeGeocoder, private backgroundGeolocation: BackgroundGeolocation,private zone: NgZone, public httpClient: HttpClient, public api: ApiProvider, private localNotifications: LocalNotifications, private vibration: Vibration, private camera: Camera, private transfer: FileTransfer, public toastCtrl: ToastController) {
 
     this.platform.ready().then(()=>{
@@ -76,12 +78,27 @@ export class HomePage implements OnInit {
       this._paket = 'basic';
     });
 
-    setInterval(() => {
+    this.timer = setInterval(() => {
       this.datatime = new Date();
-    }, 1000);
+    }, 1000*60); //1Minutes
   }
 
-  requestAccuracy() {
+  async requestAccuracy() {
+
+    var options = {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0
+    }
+
+    try {
+      const resp = await this.geolocation.getCurrentPosition(options);
+      // this.storageValue['currLatLong'] = resp.coords;
+      this.address = JSON.stringify(resp.coords)
+    } catch (e) {
+      console.log(e.message)
+    }
+
     if (this.platform.is('cordova')) {
       this.locationAccuracy.canRequest().then((canRequest: boolean) => {
 
@@ -98,10 +115,19 @@ export class HomePage implements OnInit {
   }
   
   ngOnInit() {
-    this.requestAccuracy();
     this.cekGPS();
     this.loadMap();
     // this.getAlarm();
+  }
+
+  ngOnDestroy() {
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
+  }
+
+  ionViewWillEnter() {
+    this.requestAccuracy()
   }
 
   // https://www.joshmorony.com/getting-familiar-with-local-notifications-in-ionic-2/
